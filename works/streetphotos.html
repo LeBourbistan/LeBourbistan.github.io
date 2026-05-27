@@ -37,7 +37,6 @@
     injectFooter();
     buildGallery('street');
 
-    // Créer le lightbox directement sur document.body pour éviter tout conflit de stacking
     var lb = document.createElement('div');
     lb.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:99999;align-items:center;justify-content:center;cursor:zoom-out;flex-direction:column;gap:1rem;';
     var lbImg = document.createElement('img');
@@ -48,12 +47,15 @@
     lb.appendChild(lbCap);
     document.body.appendChild(lb);
 
-    lb.addEventListener('click', function() { lb.style.display = 'none'; document.body.style.overflow = ''; });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { lb.style.display = 'none'; document.body.style.overflow = ''; } });
+    function closeLb() { lb.style.display = 'none'; document.body.style.overflow = ''; }
+
+    lb.addEventListener('click', closeLb);
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLb(); });
 
     document.getElementById('gallery-grid').addEventListener('click', function(e) {
       var item = e.target.closest('.gallery-item');
       if (!item) return;
+      e.stopPropagation();
       var img = item.querySelector('img');
       var cap = item.querySelector('.caption');
       lbImg.src = img.src;
