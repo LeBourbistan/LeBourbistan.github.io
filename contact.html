@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Le Bourbistan</title>
+  <meta name="description" content="Contactez Le Bourbistan — Ian, photographe et vidéaste d'aventures.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .contact-wrap {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--nav-h) + 4rem) 2rem 6rem;
+      text-align: center;
+      gap: 2rem;
+    }
+
+    .contact-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 500;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .contact-text {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: rgba(245,243,239,0.8);
+      max-width: 480px;
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.15s;
+    }
+
+    .contact-email {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--white);
+      border-bottom: 1px solid rgba(245,243,239,0.4);
+      padding-bottom: 3px;
+      transition: border-color 0.3s ease, opacity 0.3s ease;
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.3s;
+    }
+
+    .contact-email:hover {
+      border-bottom-color: rgba(245,243,239,0.9);
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <main class="contact-wrap">
+    <h1 class="contact-title">Contactez-moi&nbsp;!</h1>
+    <p class="contact-text">Pour toute question et/ou projet, contactez-moi à l'adresse suivante. Cliquer dessus ouvre directement votre client mail.</p>
+    <a href="mailto:kingetking.prod@gmail.com" class="contact-email">kingetking.prod@gmail.com</a>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="assets/components.js"></script>
+  <script>
+    injectNav('contact');
+    injectFooter();
+  </script>
+</body>
+</html>

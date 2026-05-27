@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon travail | Le Bourbistan</title>
+  <meta name="description" content="Vidéos, photos de rue, paysages, portraits, automobiles — découvrez le travail de Le Bourbistan.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* Fond plein écran avec l'image montagne */
+    #works-hero {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+
+    #works-hero img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    #works-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(10,10,10,0.55);
+    }
+
+    /* Contenu centré */
+    .works-menu {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      padding: calc(var(--nav-h) + 2rem) 2rem 4rem;
+    }
+
+    .works-menu-item {
+      display: block;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      color: var(--white);
+      opacity: 0.85;
+      padding: 0.3rem 1rem;
+      position: relative;
+      transition: opacity var(--transition), letter-spacing var(--transition);
+      text-align: center;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .works-menu-item:nth-child(1) { animation-delay: 0.1s; }
+    .works-menu-item:nth-child(2) { animation-delay: 0.2s; }
+    .works-menu-item:nth-child(3) { animation-delay: 0.3s; }
+    .works-menu-item:nth-child(4) { animation-delay: 0.4s; }
+    .works-menu-item:nth-child(5) { animation-delay: 0.5s; }
+    .works-menu-item:nth-child(6) { animation-delay: 0.6s; }
+
+    .works-menu-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      width: 0; height: 1px;
+      background: var(--white);
+      transform: translateX(-50%);
+      transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .works-menu-item:hover {
+      opacity: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .works-menu-item:hover::after {
+      width: 60%;
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <!-- Fond -->
+  <div id="works-hero">
+    <!--
+      Remplacer src par : assets/images/works-bg.jpg
+      C'est ton image de montagne crépusculaire (vallée sombre avec lumière sur le sommet).
+    -->
+    <img src="assets/images/main/works-bg.jpg" alt="" role="presentation" loading="eager">
+  </div>
+
+  <!-- Menu catégories -->
+  <main class="works-menu">
+    <a href="works/videos.html"      class="works-menu-item">Vidéos</a>
+    <a href="works/streetphotos.html" class="works-menu-item">Photos de rue</a>
+    <a href="works/landscapes.html"  class="works-menu-item">Paysages</a>
+    <a href="works/portraits.html"   class="works-menu-item">Portraits</a>
+    <a href="works/automobiles.html" class="works-menu-item">Automobiles</a>
+    <a href="mesdestinations.html" class="works-menu-item">Explorer</a>
+  </main>
+
+  <script src="assets/components.js"></script>
+  <script>
+    injectNav('works');
+    // Pas de footer sur cette page (plein écran)
+  </script>
+</body>
+</html>

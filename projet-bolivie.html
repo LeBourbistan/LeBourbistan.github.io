@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bolivie | Le Bourbistan</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .projet-wrap { padding-top: calc(var(--nav-h) + 5rem); padding-bottom: 4rem; max-width: 1200px; margin: 0 auto; padding-left: 2rem; padding-right: 2rem; }
+    .projet-top { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-bottom: 4rem; }
+    .projet-text h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 500; margin-bottom: 2rem; animation: fadeUp 0.8s ease both; }
+    .projet-text .body { display: flex; flex-direction: column; gap: 1.2rem; animation: fadeUp 0.8s ease both; animation-delay: 0.15s; }
+    .projet-text .body p { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(245,243,239,0.85); }
+    .projet-text .body p strong { color: var(--white); font-weight: 500; }
+    .projet-photo-col { animation: fadeUp 0.8s ease both; animation-delay: 0.2s; }
+    .projet-photo-main { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; background: #111; }
+    .projet-photo-main img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-sig { position: absolute; bottom: 1rem; right: 1.2rem; opacity: 0.55; }
+    .photo-sig svg { width: 70px; }
+    .projet-video-section h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.8rem; font-weight: 500; margin-bottom: 1.5rem; opacity: 0.7; }
+    .video-embed { position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: #111; max-width: 700px; }
+    .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    @media (max-width: 900px) { .projet-top { grid-template-columns: 1fr; gap: 2.5rem; } }
+  </style>
+</head>
+<body>
+  <nav id="navbar"></nav>
+  <main class="projet-wrap">
+    <div class="projet-top">
+      <div class="projet-text">
+        <h1>Bolivie</h1>
+        <div class="body">
+          <p>Grand amoureux de l'Europe de l'est et de l'Asie, l'Amérique du Sud n'a jamais fait partie de mes priorités. C'était sans compter sur l'avide lectrice qu'est ma mère, qui a toujours voulu voir le lac Titicaca de ses propres yeux.</p>
+          <p>Pour fêter dignement ses 60 ans, on est partis en Bolivie s'immerger dans ses villes d'altitude sèches au style colonial espagnol, dans ses déserts d'une rare aridité et dans ses reliefs volcaniques colossaux.</p>
+          <p>La Bolivie, bien que terriblement inhospitalière, est magistrale.</p>
+        </div>
+      </div>
+      <div class="projet-photo-col">
+        <div class="projet-photo-main">
+          <img src="assets/images/thumbs/thumb-bolivie.jpg" alt="Bolivie — Le Bourbistan" loading="lazy">
+        </div>
+      </div>
+    </div>
+        <div class="projet-video-section">
+      <h2>Les films</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:900px;">
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/L4kBD-lPcxQ" title="Bolivie La Paz — Le Bourbistan"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/85j_xJ3n1no" title="Bolivie Oruro Sajama — Le Bourbistan"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/4HlJIf22zWk" title="Bolivie Uyuni — Le Bourbistan"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/VU3n9RUzLOo" title="Bolivie Sucre — Le Bourbistan"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  <footer id="footer"></footer>
+  <script src="assets/components.js"></script>
+  <script>injectNav('works'); injectFooter();</script>
+</body>
+</html>

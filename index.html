@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Bourbistan | Explorez et inspirez-vous aujourd'hui</title>
+  <meta name="description" content="Quand un ingénieur se lasse de son écran pour partir arpenter le monde et l'immortaliser à travers son objectif.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; }
+
+    #hero {
+      position: relative;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    #hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,10,10,0.15) 0%,
+        rgba(10,10,10,0.0) 40%,
+        rgba(10,10,10,0.75) 100%
+      );
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 0 3rem 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    /* Signature centrale */
+    .hero-signature {
+      width: 180px;
+      opacity: 0.75;
+      animation: fadeUp 1s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(3.5rem, 7vw, 7rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      color: #f5f3ef;
+      text-shadow: 0 2px 30px rgba(0,0,0,0.4);
+      animation: fadeUp 1s ease both;
+      animation-delay: 0.2s;
+      text-align: center;
+    }
+
+    .hero-tagline {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(13px, 1.2vw, 15px);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      color: rgba(245,243,239,0.85);
+      max-width: 480px;
+      text-shadow: 0 1px 12px rgba(0,0,0,0.5);
+      animation: fadeUp 1s ease both;
+      animation-delay: 0.35s;
+      text-align: center;
+    }
+
+    /* Ligne du bas : vignette + CTA */
+    .hero-bottom {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      animation: fadeUp 1s ease both;
+      animation-delay: 0.5s;
+    }
+
+    .hero-last-prod {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-last-prod-thumb {
+      width: 160px;
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(245,243,239,0.2);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hero-last-prod-thumb:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
+    .hero-last-prod-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    @media (max-width: 700px) {
+      .hero-content { padding: 0 1.5rem 3rem; }
+      .hero-bottom { flex-direction: column; gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <section id="hero">
+    <video id="hero-video" autoplay muted loop playsinline>
+      <source src="assets/videos/hero-poster.mp4" type="video/mp4">
+    </video>
+
+    <div class="hero-content">
+      <img src="assets/identity/signature.png" alt="Le Bourbistan" class="hero-signature">
+      <h1 class="hero-title">Le Bourbistan.</h1>
+      <p class="hero-tagline">Quand un ingénieur se lasse de son écran pour partir arpenter le monde et l'immortaliser à travers son objectif.</p>
+      <div class="hero-bottom">
+        <div class="hero-last-prod">
+          <span class="eyebrow">Ma dernière production</span>
+          <a class="hero-last-prod-thumb" href="https://youtu.be/ddt7IS6ORLM" target="_blank" rel="noopener" aria-label="Voir la dernière production">
+            <img src="assets/images/thumbs/thumb-derniere-prod.jpg" alt="Dernière production Le Bourbistan" loading="lazy">
+          </a>
+        </div>
+        <a href="works.html" class="btn btn-ghost">Découvrir mon travail</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="assets/components.js"></script>
+  <script>
+    injectNav('home');
+    // Pas de footer sur le hero plein écran
+  </script>
+</body>
+</html>

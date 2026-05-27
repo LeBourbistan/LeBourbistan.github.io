@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Médias | Le Bourbistan</title>
+  <meta name="description" content="Apparitions médiatiques — Le Bourbistan repris par InoSMI (Russia Today) en Russie.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .medias-wrap {
+      padding-top: calc(var(--nav-h) + 5rem);
+      padding-bottom: 4rem;
+      max-width: 960px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .medias-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 500;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .medias-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.15s;
+    }
+
+    .medias-body p {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: rgba(245,243,239,0.85);
+    }
+
+    /* Grille des deux embeds */
+    .medias-embeds {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.3s;
+    }
+
+    .media-embed-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .media-embed-label {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 14px;
+      opacity: 0.6;
+      text-align: center;
+    }
+
+    .media-embed-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #111;
+      width: 100%;
+    }
+
+    .media-embed-thumb iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Lien article */
+    .medias-article-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 13px;
+      opacity: 0.6;
+      border-bottom: 1px solid rgba(245,243,239,0.3);
+      padding-bottom: 2px;
+      transition: opacity var(--transition);
+      margin-bottom: 3rem;
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.45s;
+    }
+    .medias-article-link:hover { opacity: 1; }
+
+    /* Bloc article inoSMI (aperçu) */
+    .inosmi-preview {
+      border: 1px solid var(--white-ghost);
+      border-radius: var(--radius);
+      padding: 2rem;
+      background: rgba(255,255,255,0.03);
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.45s;
+    }
+
+    .inosmi-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 12px;
+      opacity: 0.5;
+      letter-spacing: 0.05em;
+    }
+
+    .inosmi-badge {
+      background: #e8302d;
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+
+    .inosmi-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    @media (max-width: 700px) {
+      .medias-embeds { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <main class="medias-wrap">
+
+    <h1 class="medias-title">Apparitions médiatiques</h1>
+
+    <div class="medias-body">
+      <p>Mes travaux sur Moscou ont eu plus d'écho que je ne l'aurais jamais imaginé en Russie-même.</p>
+      <p>Ma vidéo a été traduite par l'organe de presse InoSMI (ИноСМИ), un site russe spécialisé dans la traduction de médias étrangers en russe. C'est un site appartenant au groupe médiatique Russia Today (Россия сегодня).</p>
+      <p>Le dit-contenu a été largement coupé — 3m39 contre 21m37 pour la version originale — et seules sont présentées mes premières impressions de la ville, où j'ai fatalement été impressionné par la célèbre Place Rouge et le métro moscovite. En même temps, difficile de ne pas l'être&nbsp;!</p>
+      <p>Cumulées, ces vidéos repostées ont atteint la bagatelle de 86&nbsp;100 vues au 1er octobre 2025, soit bien plus que les 52&nbsp;000 du métrage de base. Difficile de savoir à quel point ce relais a permis à la vidéo de performer plus que d'habitude mais étant donné que celle-ci a pris du temps à "exploser" sur YouTube et le nombre de commentaires russes que j'ai reçu, je pense qu'InoSMI n'est pas étranger à son succès.</p>
+    </div>
+
+    <!-- Embeds Rutube / Dzen -->
+    <div class="medias-embeds">
+      <div class="media-embed-col">
+        <p class="media-embed-label">Reupload sur rutube.ru</p>
+        <div class="media-embed-thumb">
+          <iframe
+            src="https://rutube.ru/play/embed/263d9ba8e2c7f473f5496852ed146dd4/"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div class="media-embed-col">
+        <p class="media-embed-label">Reupload sur dzen.ru</p>
+        <div class="media-embed-thumb">
+          <iframe
+            src="https://dzen.ru/embed/v3JvMw7AKYQE?from_block=partner&mute=0&autoplay=0&tv=0"
+            allow="autoplay; fullscreen; accelerometer; gyroscope; picture-in-picture; encrypted-media"
+            frameborder="0"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:14px; opacity:0.7; margin-bottom:1.5rem; font-weight:300;">
+      Le reupload sur RuTube a également eu le droit à un article associé sur la page d'InoSMI dont le texte est peu ou prou une traduction en russe de ce que je raconte dans la vidéo.
+    </p>
+
+    <a href="https://inosmi.ru/20250408/moskva-272529804.html" target="_blank" rel="noopener" class="medias-article-link">
+      Lien vers l'article InoSMI (pour les russophones) ↗
+    </a>
+
+    <!-- Aperçu article -->
+    <div class="inosmi-preview">
+      <div class="inosmi-header">
+        <span class="inosmi-badge">ИноСМИ</span>
+        <span>Россия &nbsp;|&nbsp; 08 апреля 2025 14:57 &nbsp;|&nbsp; 10 429 vues</span>
+      </div>
+      <h2 class="inosmi-title">Москва — город, который от вас скрывают</h2>
+    </div>
+
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="assets/components.js"></script>
+  <script>
+    injectNav('medias');
+    injectFooter();
+  </script>
+</body>
+</html>

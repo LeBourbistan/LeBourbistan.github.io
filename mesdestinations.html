@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes destinations | Le Bourbistan</title>
+  <meta name="description" content="Carte interactive de toutes mes destinations de voyage — Le Bourbistan.">
+  <link rel="stylesheet" href="assets/style.css">
+
+  <!-- Mapbox -->
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://unpkg.com/mapbox-gl-language/dist/mapbox-gl-language.min.js"></script>
+
+  <style>
+    /* Nav flottante au-dessus de la carte */
+    #navbar {
+      z-index: 1000;
+    }
+
+    /* Carte plein écran */
+    #map {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* On cache le body::before (bokeh) sur cette page */
+    body::before { display: none; }
+
+    /* Marqueurs */
+    .greenmarker {
+      background-image: url('assets/images/markers/GreenDot.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 30px;
+      height: 40px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .redmarker {
+      background-image: url('assets/images/markers/LightGreyDot.webp');
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 30px;
+      height: 40px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+  <div id="map"></div>
+
+  <script src="assets/components.js"></script>
+  <script>
+    injectNav('destinations');
+
+    // ---- Mapbox ----
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGVib3VyYmlzdGFuIiwiYSI6ImNtYzB5d25tNTA3M2kya3M3dXVobjl5ZmcifQ.vxEdBqOlgq4Qd_3kJZTgfw';
+
+    const styleFR = 'mapbox://styles/lebourbistan/cmc66c66f00ys01sd41bzf8v8';
+    const styleEN = 'mapbox://styles/lebourbistan/cmc679dmt02b701scf1x9g9wi';
+
+    const userLang    = navigator.language || navigator.userLanguage;
+    const chosenStyle = userLang.startsWith('fr') ? styleFR : styleEN;
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: chosenStyle,
+      center: [2.3522, 48.8566],
+      zoom: 3.5
+    });
+
+    const lieux = [
+      { nom: 'Moscou',           coord: [37.6173,  55.7558], lien: 'destinations/moscou.html',          actif: true  },
+      { nom: 'Saint-Pétersbourg',coord: [30.3351,  59.9343], lien: 'destinations/saint-petersbourg.html',          actif: true  },
+      { nom: 'Porto',            coord: [-8.6110,  41.1496], lien: 'destinations/porto.html',          actif: true  },
+      { nom: 'Nürburg',          coord: [6.9494,   50.3369], lien: 'destinations/nurburg.html', actif: true  },
+      { nom: 'Ljubljana',        coord: [14.5058,  46.0569], lien: 'destinations/ljubljana.html',          actif: true  },
+      { nom: 'Sarajevo',         coord: [18.4131,  43.8563], lien: 'destinations/sarajevo.html',          actif: true  },
+      { nom: 'Tirana',           coord: [19.8189,  41.3275], lien: 'destinations/tirana.html',          actif: true  },
+      { nom: 'Athènes',          coord: [23.7275,  37.9838], lien: 'destinations/athenes.html',          actif: true  },
+      { nom: 'Istanbul',         coord: [28.9784,  41.0082], lien: 'destinations/istanbul.html',          actif: true  },
+      { nom: 'Kars',             coord: [43.0954,  40.6030], lien: 'destinations/kars.html',          actif: true  },
+      { nom: 'Diyarbakir',       coord: [40.2100,  37.9144], lien: 'destinations/diyarbakir.html',       actif: true  },
+      { nom: 'Erbil',            coord: [44.0089,  36.1911], lien: 'destinations/erbil.html',            actif: true  },
+      { nom: 'Sulaymaniyah',     coord: [45.4300,  35.5613], lien: 'destinations/sulaymaniyah.html',          actif: true  },
+      { nom: 'Tbilisi',          coord: [44.8271,  41.7151], lien: 'destinations/tbilisi.html',          actif: true  },
+      { nom: 'Yerevan',          coord: [44.5152,  40.1792], lien: 'destinations/yerevan.html',   actif: true  },
+      { nom: 'Bucarest',         coord: [26.1025,  44.4268], lien: 'destinations/bucarest.html',         actif: true  },
+      { nom: 'Timisoara',        coord: [21.2294,  45.7489], lien: 'destinations/timisoara.html',          actif: true  },
+      { nom: 'Iasi',             coord: [27.5723,  47.1585], lien: 'destinations/iasi.html',             actif: true  },
+      { nom: 'Copenhague',       coord: [12.5683,  55.6761], lien: 'destinations/copenhague.html',          actif: true },
+      { nom: 'Almaty',           coord: [76.8860,  43.2389], lien: 'destinations/almaty.html',          actif: true  },
+      { nom: 'Bishkek',          coord: [74.5827,  42.8746], lien: 'destinations/bishkek.html',          actif: true  },
+      { nom: 'Tashkent',         coord: [69.2797,  41.2995], lien: 'destinations/tashkent.html',          actif: true  },
+      { nom: 'Samarcande',       coord: [66.9750,  39.6270], lien: 'destinations/samarcande.html',          actif: true  },
+      { nom: 'Douchanbé',        coord: [68.7739,  38.5598], lien: 'destinations/douchanbe.html',          actif: true  },
+      { nom: 'Murghab',          coord: [73.9650,  38.1689], lien: 'destinations/murghab.html',          actif: true  },
+      { nom: 'Pékin',            coord: [116.4074, 39.9042], lien: 'destinations/pekin.html',          actif: true  },
+      { nom: 'Shenzhen',         coord: [114.0579, 22.5431], lien: 'destinations/shenzhen.html',          actif: true  },
+      { nom: 'Taipei',           coord: [121.5654, 25.0329], lien: 'destinations/taipei.html',          actif: true  },
+      { nom: 'Siargao',          coord: [126.0576,  9.8486], lien: 'destinations/siargao.html',          actif: true  },
+      { nom: 'Fukuoka',          coord: [130.4017, 33.5904], lien: 'destinations/fukuoka.html',          actif: true  },
+      { nom: 'Yokohama',         coord: [139.6380, 35.4437], lien: 'destinations/yokohama.html',          actif: true  },
+      { nom: 'Séoul',            coord: [126.9780, 37.5665], lien: 'destinations/seoul.html',          actif: true  },
+      { nom: 'Ubud',             coord: [115.2625, -8.5069], lien: 'destinations/ubud.html',          actif: true  },
+      { nom: 'Phnom-Penh',       coord: [104.9160, 11.5564], lien: 'destinations/phnom-penh.html',          actif: true  },
+      { nom: 'Guilin',           coord: [110.2902, 25.2736], lien: 'destinations/guilin.html',          actif: true },
+      { nom: 'Shanghai',         coord: [121.4737, 31.2304], lien: 'destinations/shanghai.html',          actif: true },
+      { nom: 'Hong-Kong',        coord: [114.1694, 22.3193], lien: 'destinations/hong-kong.html',          actif: true },
+      { nom: 'Macao',            coord: [113.5439, 22.1987], lien: 'destinations/macao.html',          actif: true },
+      { nom: 'La Paz',           coord: [-68.1193,-16.5000], lien: 'destinations/la-paz.html',   actif: true  },
+      { nom: 'Sucre',            coord: [-65.2619,-19.0333], lien: 'destinations/sucre.html',          actif: true  },
+      { nom: 'Oruro',            coord: [-67.1135,-17.9833], lien: 'destinations/oruro.html',          actif: true  },
+      { nom: 'Sajama',           coord: [-68.8810,-18.1070], lien: 'destinations/sajama.html',          actif: true  },
+      { nom: 'Uyuni',            coord: [-66.8350,-20.4600], lien: 'destinations/uyuni.html',          actif: true  },
+      { nom: 'Van',              coord: [43.3833,  38.5016], lien: 'destinations/van.html',          actif: true  },
+      { nom: 'Meghri',           coord: [46.2458,  38.9033], lien: 'destinations/meghri.html',          actif: true  },
+      { nom: 'Batumi',           coord: [41.6431,  41.6412], lien: 'destinations/batumi.html',          actif: true  },
+      { nom: 'Gyumri',           coord: [43.8493,  40.7940], lien: 'destinations/gyumri.html',          actif: true  },
+      { nom: 'Braşov',           coord: [25.6012,  45.6563], lien: 'destinations/brasov.html',          actif: true  },
+      { nom: 'Mostar',           coord: [17.8078,  43.3378], lien: 'destinations/mostar.html',          actif: true  },
+      { nom: 'Gjirokaster',      coord: [20.1410,  40.0759], lien: 'destinations/gjirokaster.html',          actif: true  },
+      { nom: 'Jakeš',            coord: [18.2787,  44.9801], lien: 'destinations/jakes.html',          actif: true  },
+      { nom: 'Porto Palermo',    coord: [19.5743,  40.0444], lien: 'destinations/porto-palermo.html',          actif: true  },
+      { nom: 'Gythio',           coord: [22.5471,  36.7344], lien: 'destinations/gythio.html',          actif: true  },
+      { nom: 'Miyazaki',         coord: [131.4239, 31.9077], lien: 'destinations/miyazaki.html',          actif: true  },
+      { nom: 'Hsinchu',          coord: [120.9714, 24.8138], lien: 'destinations/hsinchu.html',          actif: true  },
+      { nom: 'Hualien',          coord: [121.6074, 23.9763], lien: 'destinations/hualien.html',          actif: true  },
+      { nom: 'Varna',            coord: [27.9168,  43.2141], lien: 'destinations/varna.html',          actif: true },
+      { nom: 'Plovdiv',          coord: [24.7536,  42.1354], lien: 'destinations/plovdiv.html',          actif: true },
+      { nom: 'Sofia',            coord: [23.3219,  42.6977], lien: 'destinations/sofia.html',          actif: true },
+      { nom: 'Budapest',         coord: [19.0402,  47.4979], lien: 'destinations/budapest.html',          actif: true },
+      { nom: 'Londres',          coord: [-0.1276,  51.5074], lien: 'destinations/londres.html',          actif: true },
+      { nom: 'Cracovie',         coord: [19.9450,  50.0647], lien: 'destinations/cracovie.html',          actif: true },
+      { nom: 'Xiamen',           coord: [118.0790, 24.4798], lien: 'destinations/xiamen.html',          actif: true  },
+      { nom: 'Hangzhou',         coord: [120.1551, 30.2741], lien: 'destinations/hangzhou.html',          actif: true },
+      { nom: 'Daegu',            coord: [128.6014, 35.8714], lien: 'destinations/daegu.html',          actif: true  },
+      { nom: 'Busan',            coord: [129.0756, 35.1796], lien: 'destinations/busan.html',          actif: true  },
+      { nom: 'Osaka',            coord: [135.5023, 34.6937], lien: 'destinations/osaka.html',          actif: true },
+      { nom: 'Hiroshima',        coord: [132.4553, 34.3853], lien: 'destinations/hiroshima.html',          actif: true },
+      { nom: 'Siem Reap',        coord: [103.8563, 13.3671], lien: 'destinations/siem-reap.html',          actif: true  },
+      { nom: 'Kampot',           coord: [104.1715, 10.6128], lien: 'destinations/kampot.html',          actif: true  },
+      { nom: 'Koh Rong Samloem', coord: [103.2330, 10.7700], lien: 'destinations/koh-rong-samloem.html',          actif: true  },
+      { nom: 'Manille',          coord: [120.9842, 14.5995], lien: 'destinations/manille.html',          actif: true  },
+      { nom: 'Malang',           coord: [112.6304, -7.9666], lien: 'destinations/malang.html',          actif: true  },
+      { nom: 'Yogyakarta',       coord: [110.3608, -7.8014], lien: 'destinations/yogyakarta.html',          actif: true  },
+      { nom: 'Jakarta',          coord: [106.8456, -6.2088], lien: 'destinations/jakarta.html',          actif: true  },
+      { nom: 'Ketapang',         coord: [114.3696, -8.1870], lien: 'destinations/ketapang.html',          actif: true  },
+      { nom: 'Berlin',           coord: [13.4050,  52.5200], lien: 'destinations/berlin.html',          actif: true },
+      { nom: 'Dubai',            coord: [55.2708,  25.2048], lien: 'destinations/dubai.html',          actif: true },
+      { nom: 'Francfort',        coord: [8.6821,   50.1109], lien: 'destinations/francfort.html',          actif: true },
+      { nom: 'Hamburg',          coord: [9.9937,   53.5511], lien: 'destinations/hamburg.html',          actif: true },
+      { nom: 'Stuttgart',        coord: [9.1829,   48.7758], lien: 'destinations/stuttgart.html',          actif: true  },
+      { nom: 'Prague',           coord: [14.4378,  50.0755], lien: 'destinations/prague.html',          actif: true },
+      { nom: 'Skopje',           coord: [21.4300,  42.0000], lien: 'destinations/skopje.html',          actif: true },
+      { nom: 'Ohrid',            coord: [20.8015,  41.1172], lien: 'destinations/ohrid.html',          actif: true },
+      { nom: 'Bukhara',          coord: [64.4217,  39.7747], lien: 'destinations/bukhara.html',          actif: true  },
+      { nom: 'Karakol',          coord: [78.3921,  42.4959], lien: 'destinations/karakol.html',          actif: true  },
+      { nom: 'Naryn',            coord: [75.9991,  41.4280], lien: 'destinations/naryn.html',          actif: true  },
+      { nom: 'Osh',              coord: [73.2470,  40.5137], lien: 'destinations/osh.html',          actif: true  },
+      { nom: 'Sary Chelek',      coord: [71.9494,  41.8905], lien: 'destinations/sary-chelek.html',          actif: true  },
+      { nom: 'Kyzyl Oi',         coord: [74.1563,  41.9555], lien: 'destinations/kyzyl-oi.html',          actif: true  },
+      { nom: 'Min Kush',         coord: [74.4570,  41.6735], lien: 'destinations/min-kush.html',          actif: true  },
+      { nom: 'Ishkashim',        coord: [71.6117,  36.7272], lien: 'destinations/ishkashim.html',          actif: true  },
+      { nom: 'Barskoon',         coord: [77.6039,  42.1561], lien: 'destinations/barskoon.html',          actif: true  },
+      { nom: 'Hammamet',         coord: [10.6101,  36.3992], lien: 'destinations/hammamet.html',          actif: true },
+      { nom: 'La Valette',       coord: [14.5146,  35.8997], lien: 'destinations/la-valette.html',     actif: true  },
+      { nom: 'Nevers Magny-Cours',coord: [3.1536,  46.8642], lien: 'destinations/nevers-magny-cours.html',       actif: true  },
+      { nom: 'Zagreb',           coord: [15.9819,  45.8150], lien: 'destinations/zagreb.html',          actif: true  },
+      { nom: 'New York',         coord: [-74.006,  40.7128], lien: 'destinations/new-york.html',          actif: true },
+      { nom: 'Los Angeles',      coord: [-118.2437,34.0522], lien: 'destinations/los-angeles.html',          actif: true },
+      { nom: 'Paris',            coord: [2.3522,   48.8566], lien: 'destinations/paris.html',          actif: true },
+      { nom: 'Amsterdam',        coord: [4.9041,   52.3676], lien: 'destinations/amsterdam.html',          actif: true },
+      { nom: 'Bruxelles',        coord: [4.3517,   50.8503], lien: 'destinations/bruxelles.html',          actif: true },
+      { nom: 'Luxembourg',       coord: [6.1319,   49.6117], lien: 'destinations/luxembourg.html',          actif: true },
+      { nom: 'Tjambarak',        coord: [45.3397,  40.5950], lien: 'destinations/tjambarak.html',          actif: true  },
+    ];
+
+    lieux.forEach((lieu) => {
+      const container = document.createElement('div');
+      const marker    = document.createElement('div');
+
+      if (lieu.actif) {
+        marker.className = 'greenmarker';
+        marker.addEventListener('click', () => {
+          window.location.href = lieu.lien;
+        });
+      } else {
+        marker.className = 'greenmarker';
+      }
+
+      marker.title = lieu.nom;
+      marker.addEventListener('mouseover', () => { marker.style.transform = 'scale(1.6)'; });
+      marker.addEventListener('mouseout',  () => { marker.style.transform = 'scale(1)'; });
+
+      container.appendChild(marker);
+
+      new mapboxgl.Marker(container)
+        .setLngLat(lieu.coord)
+        .addTo(map);
+    });
+  </script>
+</body>
+</html>

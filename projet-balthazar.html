@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet Balthazar | Le Bourbistan</title>
+  <meta name="description" content="40 jours en van entre la France et la Grèce, puis plus de 8 mois entre le Kirghizistan et le Cambodge.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .projet-wrap {
+      padding-top: calc(var(--nav-h) + 5rem);
+      padding-bottom: 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    /* Layout haut : texte gauche, photo droite */
+    .projet-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-bottom: 4rem;
+    }
+
+    .projet-text h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 500;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .projet-text .body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.15s;
+    }
+
+    .projet-text .body p {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: rgba(245,243,239,0.85);
+    }
+
+    .projet-text .body p strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    /* Photo principale avec slider simplifié */
+    .projet-photo-col {
+      position: relative;
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.2s;
+    }
+
+    .projet-photo-main {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: #111;
+    }
+
+    .projet-photo-main img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-sig {
+      position: absolute;
+      bottom: 1rem; right: 1.2rem;
+      opacity: 0.55;
+    }
+    .photo-sig svg { width: 70px; }
+
+    /* Grille vidéos en bas */
+    .projet-videos-section {
+      margin-top: 1rem;
+    }
+
+    .projet-videos-section h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.8rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      opacity: 0.7;
+    }
+
+    .projet-videos-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+    }
+
+    .video-thumb-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: opacity var(--transition);
+    }
+    .video-thumb-card:hover { opacity: 0.85; }
+
+    .video-thumb-img {
+      position: relative;
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #1a1a1a;
+    }
+
+    .video-thumb-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .video-thumb-card:hover .video-thumb-img img { transform: scale(1.05); }
+
+    /* Icône play */
+    .video-thumb-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+      transition: background var(--transition);
+    }
+    .video-thumb-card:hover .video-thumb-img::after { background: rgba(0,0,0,0.1); }
+
+    .play-icon {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+      backdrop-filter: blur(4px);
+    }
+    .play-icon svg { width: 12px; height: 12px; fill: white; margin-left: 2px; }
+
+    .video-thumb-title {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: rgba(245,243,239,0.8);
+    }
+
+    .video-thumb-date {
+      font-size: 11px;
+      opacity: 0.4;
+    }
+
+    @media (max-width: 900px) {
+      .projet-top { grid-template-columns: 1fr; gap: 2.5rem; }
+      .projet-videos-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .projet-videos-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <main class="projet-wrap">
+
+    <div class="projet-top">
+
+      <!-- Texte -->
+      <div class="projet-text">
+        <h1>Projet Balthazar</h1>
+        <div class="body">
+          <p>Du nom du van acheté dans un premier temps pour <strong>rallier la Moselle à l'est russe en 8 mois</strong>, cette grande entreprise a fini par s'étirer sur plus d'un an : 40 jours en van entre la France et la Grèce, puis plus de 8 mois de voyage plus léger entre le Kirghizistan et le Cambodge.</p>
+          <p>C'est de loin le projet le plus ambitieux qu'il m'ait été donné de réaliser et également celui qui m'a le plus appris sur les autres et sur moi-même.</p>
+          <p>Pas moins de 20 vidéos seront réalisées sur cette grande aventure, ce qui en fait également le plus vaste projet audiovisuel de ma vie dans le quel on me voit autant grandir en tant qu'humain mais également en tant que vidéaste.</p>
+          <p>Je pourrais considérer ce périple comme le voyage d'une vie, mais je ne saurais accepter de ne jamais avoir l'occasion de remettre ça&nbsp;!</p>
+        </div>
+      </div>
+
+      <!-- Photo principale -->
+      <div class="projet-photo-col">
+        <div class="projet-photo-main">
+          <!--
+            Remplacer par : assets/images/projets/balthazar-main.jpg
+            Photo : toi et ton co-équipier sur le van devant une ville en contrebas
+          -->
+          <img src="assets/images/thumbs/thumb-balthazar.jpg" alt="Projet Balthazar — Le Bourbistan" loading="lazy">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Vidéos de la série -->
+    <div class="projet-videos-section">
+      <h2>Les épisodes</h2>
+            <div class="projet-videos-grid">
+        <a href="https://www.youtube.com/@LeBourbistan/videos" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/EuiPApdNj8A/mqdefault.jpg" alt="On a acheté un van aménagé on se casse" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">On a acheté un van aménagé on se casse</div>
+          <div class="video-thumb-date">Ep.0</div>
+        </a>
+        <a href="https://www.youtube.com/@LeBourbistan/videos" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/EuiPApdNj8A/mqdefault.jpg" alt="VANTOUR : Balthazar, notre van de voyage" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">VANTOUR : Balthazar, notre van de voyage</div>
+          <div class="video-thumb-date">Ep.1</div>
+        </a>
+        <a href="https://www.youtube.com/@LeBourbistan/videos" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/EuiPApdNj8A/mqdefault.jpg" alt="SLOVÉNIE — Mon appareil photo me crève dans les bras" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">SLOVÉNIE — Mon appareil photo me crève dans les bras</div>
+          <div class="video-thumb-date">Ep.2</div>
+        </a>
+        <a href="https://www.youtube.com/@LeBourbistan/videos" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/EuiPApdNj8A/mqdefault.jpg" alt="BOSNIE — Le cœur incompris des Balkans" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">BOSNIE — Le cœur incompris des Balkans</div>
+          <div class="video-thumb-date">Ep.3</div>
+        </a>
+        <a href="https://www.youtube.com/@LeBourbistan/videos" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/EuiPApdNj8A/mqdefault.jpg" alt="L'ALBANIE c'est TRÈS DANGEREUX (nope)" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">L'ALBANIE c'est TRÈS DANGEREUX (nope)</div>
+          <div class="video-thumb-date">Ep.4</div>
+        </a>
+        <a href="https://www.youtube.com/@LeBourbistan/videos" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/EuiPApdNj8A/mqdefault.jpg" alt="On se fait CAMBR!OLER à Athènes — FIN DE LA VANLIFE" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">On se fait CAMBR!OLER à Athènes — FIN DE LA VANLIFE</div>
+          <div class="video-thumb-date">Ep.5</div>
+        </a>
+        <a href="https://www.youtube.com/@LeBourbistan/videos" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/EuiPApdNj8A/mqdefault.jpg" alt="VANLIFE : Ce que j'aurais voulu savoir avant de partir" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">VANLIFE : Ce que j'aurais voulu savoir avant de partir</div>
+          <div class="video-thumb-date">Ep.6</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=EuiPApdNj8A" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/EuiPApdNj8A/mqdefault.jpg" alt="KIRGHIZISTAN — La Suisse de l'Asie Centrale" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">KIRGHIZISTAN — La Suisse de l'Asie Centrale</div>
+          <div class="video-thumb-date">Ep.7</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=SQFCVKZCUUM" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/SQFCVKZCUUM/mqdefault.jpg" alt="KIRGHIZISTAN — Le Paradis des randonneurs" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">KIRGHIZISTAN — Le Paradis des randonneurs</div>
+          <div class="video-thumb-date">Ep.8</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=40_v7u8XbLM" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/40_v7u8XbLM/mqdefault.jpg" alt="Les 10 jours les plus intenses de ma vie — Pamir, TADJIKISTAN" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">Les 10 jours les plus intenses de ma vie — Pamir, TADJIKISTAN</div>
+          <div class="video-thumb-date">Ep.9</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=610GoGx4NRg" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/610GoGx4NRg/mqdefault.jpg" alt="ISLAM + URSS = OUZBÉKISTAN" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">ISLAM + URSS = OUZBÉKISTAN</div>
+          <div class="video-thumb-date">Ep.10</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=YgQ89UC_gk4" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/YgQ89UC_gk4/mqdefault.jpg" alt="MOSCOU — Cette ville qu'on vous CACHE" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">MOSCOU — Cette ville qu'on vous CACHE</div>
+          <div class="video-thumb-date">Ep.11</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=aYdClh-fykU" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/aYdClh-fykU/mqdefault.jpg" alt="SAINT-PÉTERSBOURG — Pourquoi je suis obsédé par l'ex-URSS ?" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">SAINT-PÉTERSBOURG — Pourquoi je suis obsédé par l'ex-URSS ?</div>
+          <div class="video-thumb-date">Ep.12</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=kE_BuesEA1o" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/kE_BuesEA1o/mqdefault.jpg" alt="PÉKIN c'est NUL (mais c'est un peu ma faute)" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">PÉKIN c'est NUL (mais c'est un peu ma faute)</div>
+          <div class="video-thumb-date">Ep.13</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=xASSdc_-gP8" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/xASSdc_-gP8/mqdefault.jpg" alt="TAÏWAN, la jungle derrière les gratte-ciels" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">TAÏWAN, la jungle derrière les gratte-ciels</div>
+          <div class="video-thumb-date">Ep.14</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=BjUYJwHwxdg" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/BjUYJwHwxdg/mqdefault.jpg" alt="La CHINE se développe TROP VITE ? — SHENZHEN" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">La CHINE se développe TROP VITE ? — SHENZHEN</div>
+          <div class="video-thumb-date">Ep.15</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=Y1EhDm0-25M" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/Y1EhDm0-25M/mqdefault.jpg" alt="Philippines — Bienvenue au PARADIS" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">Philippines — Bienvenue au PARADIS</div>
+          <div class="video-thumb-date">Ep.16</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=aYF_J2IGNmM" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/aYF_J2IGNmM/mqdefault.jpg" alt="Pourquoi la CORÉE DU SUD m'a déçu ?" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">Pourquoi la CORÉE DU SUD m'a déçu ?</div>
+          <div class="video-thumb-date">Ep.17</div>
+        </a>
+        <a href="https://www.youtube.com/watch?v=6A9Kgn0s5P4" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/6A9Kgn0s5P4/mqdefault.jpg" alt="Pourquoi je suis pas RESTÉ au JAPON ?" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">Pourquoi je suis pas RESTÉ au JAPON ?</div>
+          
+        </a>
+        <a href="https://www.youtube.com/watch?v=ddt7IS6ORLM" target="_blank" rel="noopener" class="video-thumb-card">
+          <div class="video-thumb-img">
+            <img src="https://img.youtube.com/vi/ddt7IS6ORLM/mqdefault.jpg" alt="INDONÉSIE" loading="lazy">
+            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div>
+          </div>
+          <div class="video-thumb-title">INDONÉSIE</div>
+          
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="assets/components.js"></script>
+  <script>
+    injectNav('works');
+    injectFooter();
+
+    /*
+      POUR REMPLIR LES MINIATURES YOUTUBE AUTOMATIQUEMENT :
+      Remplace chaque YOUTUBE_ID_EPx par l'ID réel de la vidéo.
+      L'URL de miniature est automatique :
+      https://img.youtube.com/vi/TON_ID/mqdefault.jpg
+      Pas besoin de télécharger les images, YouTube les sert directement !
+    */
+  </script>
+</body>
+</html>

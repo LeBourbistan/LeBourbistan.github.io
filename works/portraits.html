@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portraits | Le Bourbistan</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .gallery-wrap { padding-top: calc(var(--nav-h) + 5rem); padding-bottom: 4rem; max-width: 1300px; margin: 0 auto; padding-left: 2rem; padding-right: 2rem; }
+    .gallery-header { margin-bottom: 3rem; animation: fadeUp 0.8s ease both; }
+    .gallery-header h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2.5rem, 4vw, 4rem); font-weight: 500; margin-bottom: 0.4rem; }
+    .gallery-header .subtitle { font-size: 14px; opacity: 0.5; font-weight: 300; font-style: italic; font-family: 'Cormorant Garamond', Georgia, serif; }
+    #gallery-grid { columns: 2; column-gap: 1.5rem; }
+    .gallery-item { cursor: zoom-in; break-inside: avoid; margin-bottom: 1.5rem; border-radius: 12px; overflow: hidden; background: #111; position: relative; animation: fadeUp 0.8s ease both; }
+    .gallery-item img { width: 100%; display: block; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); }
+    .gallery-item:hover img { transform: scale(1.03); }
+    .gallery-item .caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem 1rem 1rem; background: linear-gradient(transparent, rgba(0,0,0,0.7)); font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 13px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s ease; }
+    .gallery-item:hover .caption { opacity: 1; transform: translateY(0); }
+    #lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:9999; align-items:center; justify-content:center; cursor:zoom-out; } #lightbox.open { display:flex; } #lightbox img { max-width:90vw; max-height:90vh; object-fit:contain; border-radius:4px; } #lightbox-caption { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); font-family:"Cormorant Garamond",Georgia,serif; font-style:italic; font-size:15px; opacity:0.7; pointer-events:none; } @media (max-width: 700px) { #gallery-grid { columns: 1; } }
+  </style>
+</head>
+<body>
+  <nav id="navbar"></nav>
+  <main class="gallery-wrap">
+    <div class="gallery-header">
+      <h1>Portraits</h1>
+      <p class="subtitle">Les visages du chemin.</p>
+    </div>
+    <div id="gallery-grid"></div>
+  </main>
+  <footer id="footer"></footer>
+  <div id="lightbox"><img id="lightbox-img" src="" alt=""><div id="lightbox-caption"></div></div>
+  <script src="../assets/components.js"></script>
+  <script src="../assets/gallery.js"></script>
+  <script>
+    injectNav('works');
+    injectFooter();
+    buildGallery('portrait');
+    document.getElementById('gallery-grid').addEventListener('click', e => {
+      const img = e.target.closest('.gallery-item')?.querySelector('img');
+      if (!img) return;
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox-caption').textContent =
+        e.target.closest('.gallery-item')?.querySelector('.caption')?.textContent || '';
+      document.getElementById('lightbox').classList.add('open');
+    });
+    document.getElementById('lightbox').addEventListener('click', () => {
+      document.getElementById('lightbox').classList.remove('open');
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>À propos | Le Bourbistan</title>
+  <meta name="description" content="J'ai toujours voyagé et créé d'aussi loin que je me souvienne. Ian, auteur-réalisateur de films documentaires immersifs.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+      padding-top: calc(var(--nav-h) + 5rem);
+      padding-bottom: 6rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    /* Colonne photo */
+    .about-photo-col {
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+    }
+
+    .about-photo-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+
+    .about-photo-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    /* Signature en bas à droite de la photo */
+    .about-photo-sig {
+      position: absolute;
+      bottom: 1.2rem; right: 1.5rem;
+      opacity: 0.65;
+    }
+    .about-photo-sig svg { width: 90px; }
+
+    /* Colonne texte */
+    .about-text-col {
+      padding-top: 1rem;
+    }
+
+    .about-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+      font-weight: 500;
+      line-height: 1.15;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .about-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .about-body p {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: rgba(245,243,239,0.85);
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .about-body p strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .about-body p em {
+      font-style: italic;
+    }
+
+    .about-body .about-sign {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      opacity: 0.7;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .about-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding-top: calc(var(--nav-h) + 3rem);
+      }
+      .about-photo-col { position: static; }
+      .about-photo-wrap { aspect-ratio: 4/3; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <main class="about-layout">
+
+    <!-- Photo -->
+    <div class="about-photo-col anim-fade-up">
+      <div class="about-photo-wrap">
+        <!--
+          Remplacer src par : assets/images/about-ian.jpg
+          C'est la photo de toi au bureau avec les écrans.
+        -->
+        <img src="assets/images/main/about-ian.jpg" alt="Ian — Le Bourbistan" loading="lazy">
+        </div>
+    </div>
+
+    <!-- Texte -->
+    <div class="about-text-col">
+      <h1 class="about-title">J'ai toujours voyagé et créé d'aussi loin que je me souvienne.</h1>
+
+      <div class="about-body">
+        <p class="anim-fade-up anim-delay-1">
+          Je suis né et j'ai grandi dans le bassin houiller de Lorraine, à la frontière allemande, dans le nord-est de la France. Je suis ingénieur en développement informatique diplômé mais aussi et surtout <strong>auteur-réalisateur de films documentaires immersifs indépendants à la première personne</strong>.
+        </p>
+        <p class="anim-fade-up anim-delay-2">
+          En 2017, dans le cadre de mes études, je passe 6 mois au Japon. Grand habitué des voyages occidentaux, cette immersion en Extrême-Orient a marqué un tournant décisif.
+        </p>
+        <p class="anim-fade-up anim-delay-2">
+          Pour en garder une trace, je documente mes 6 mois de vie nippone en vidéo. Cet attrait presque obsessionnel pour la synergie entre le voyage et l'audiovisuel s'impose alors comme une évidence.
+        </p>
+        <p class="anim-fade-up anim-delay-3">
+          Les années suivantes, de retour en France, je me suis inévitablement senti à l'étroit derrière mon clavier, vissé sur ma chaise de bureau. Je recommence alors à partir encore et encore, dès que le temps et mes finances me le permettent.
+        </p>
+        <p class="anim-fade-up anim-delay-3">
+          En 2022 naît <strong>Le Bourbistan</strong> — contraction de <em>bourbier</em> et <em>-stan</em>, suffixe des pays d'Asie Centrale — avec un ami qui partageait les mêmes aspirations. Le temps et certains évènements nous séparent et je tiens aujourd'hui seul ce pays fictif, cette identité, ce narratif entre mes mains.
+        </p>
+        <p class="anim-fade-up anim-delay-4">
+          Je travaille désormais <strong>en autonomie complète, de l'écriture à la post-production</strong> (réalisation, cadre, son, montage, étalonnage). Cette approche me permet de conserver une cohérence artistique forte et un rapport direct au terrain, à l'image et au récit.
+        </p>
+        <p class="anim-fade-up anim-delay-4">
+          Ce travail s'inscrit dans une démarche documentaire au long cours, pensée comme un espace de création en dialogue avec des projets audiovisuels exigeants et variés.
+        </p>
+        <p class="anim-fade-up anim-delay-4">
+          Le Bourbistan est à ce jour le projet le plus abouti qu'il m'ait été donné d'entreprendre.
+        </p>
+        <p class="anim-fade-up anim-delay-4">
+          <strong>Et ce n'est que le début.</strong>
+        </p>
+        <p class="about-sign anim-fade-up anim-delay-4">Ian</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="assets/components.js"></script>
+  <script>
+    injectNav('about');
+    injectFooter();
+  </script>
+</body>
+</html>

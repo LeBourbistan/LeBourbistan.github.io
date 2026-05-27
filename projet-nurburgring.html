@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'Enfer Vert — Nürburgring | Le Bourbistan</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .projet-wrap { padding-top: calc(var(--nav-h) + 5rem); padding-bottom: 4rem; max-width: 1200px; margin: 0 auto; padding-left: 2rem; padding-right: 2rem; }
+    .projet-top { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-bottom: 4rem; }
+    .projet-text h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2.2rem,4vw,3.5rem); font-weight: 500; margin-bottom: 2rem; animation: fadeUp 0.8s ease both; }
+    .projet-text .body { display: flex; flex-direction: column; gap: 1.2rem; animation: fadeUp 0.8s ease both; animation-delay: 0.15s; }
+    .projet-text .body p { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(245,243,239,0.85); }
+    .projet-photo-col { animation: fadeUp 0.8s ease both; animation-delay: 0.2s; }
+    .projet-photo-main { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; background: #111; }
+    .projet-photo-main img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-sig { position: absolute; bottom: 1rem; right: 1.2rem; opacity: 0.55; }
+    .photo-sig svg { width: 70px; }
+    .projet-video-section h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.8rem; font-weight: 500; margin-bottom: 1.5rem; opacity: 0.7; }
+    .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 900px; }
+    .video-embed { position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: #111; }
+    .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    @media (max-width: 900px) { .projet-top { grid-template-columns: 1fr; gap: 2.5rem; } .video-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav id="navbar"></nav>
+  <main class="projet-wrap">
+    <div class="projet-top">
+      <div class="projet-text">
+        <h1>L'Enfer Vert</h1>
+        <div class="body">
+          <p>Beaucoup considèrent à tort la passion automobile comme puérile. La boucle nord du Nürburgring, la Nordschleife, piste légendaire de presque 21km de long, est probablement le circuit le plus exigeant du monde.</p>
+          <p>Plus de 300m de dénivelé, 176 virages, une asphalte irrégulière et peu d'espace pour se rattraper en cas de sortie de route : c'est un terrain de jeu impitoyable pour les pilotes.</p>
+          <p>Situé dans la région verdoyante de l'Eifel en Allemagne, c'est un pèlerinage pour tout passionné de sport automobile qui vient enchaîner les tours et défier les courbes légendaires.</p>
+        </div>
+      </div>
+      <div class="projet-photo-col">
+        <div class="projet-photo-main">
+          <img src="assets/images/thumbs/thumb-nurburgring.jpg" alt="Nürburgring — Le Bourbistan" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <div class="projet-video-section">
+      <h2>Les films</h2>
+      <div class="video-grid">
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/zbinRiSjc-c" title="Nürburgring — Le Bourbistan" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/ZSr9bH5kjio" title="Nürburgring #2 — Le Bourbistan" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer id="footer"></footer>
+  <script src="assets/components.js"></script>
+  <script>injectNav('works'); injectFooter();</script>
+</body>
+</html>

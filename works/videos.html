@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vidéos | Le Bourbistan</title>
+  <meta name="description" content="Tous les films et documentaires de Le Bourbistan.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .videos-wrap {
+      padding-top: calc(var(--nav-h) + 5rem);
+      padding-bottom: 4rem;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .videos-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .videos-header h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .videos-header p {
+      font-size: 14px;
+      opacity: 0.5;
+      font-weight: 300;
+      animation: fadeUp 0.8s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .video-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #111;
+      cursor: pointer;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .video-card:nth-child(1) { animation-delay: 0.1s; }
+    .video-card:nth-child(2) { animation-delay: 0.2s; }
+    .video-card:nth-child(3) { animation-delay: 0.3s; }
+    .video-card:nth-child(4) { animation-delay: 0.4s; }
+    .video-card:nth-child(5) { animation-delay: 0.5s; }
+    .video-card:nth-child(6) { animation-delay: 0.6s; }
+    .video-card:nth-child(7) { animation-delay: 0.7s; }
+    .video-card:nth-child(8) { animation-delay: 0.8s; }
+
+    .video-card-thumb {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+
+    .video-card-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .video-card:hover .video-card-thumb img {
+      transform: scale(1.05);
+    }
+
+    .video-card-body {
+      padding: 1.2rem 1.5rem 1.5rem;
+    }
+
+    .video-card-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 0.6rem;
+    }
+
+    .video-card-desc {
+      font-size: 13px;
+      font-weight: 300;
+      opacity: 0.7;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 800px) {
+      .videos-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar"></nav>
+
+  <main class="videos-wrap">
+
+    <div class="videos-header">
+      <h1>Vidéos</h1>
+      <p>Films documentaires et reportages de voyage.</p>
+    </div>
+
+    <div class="videos-grid">
+
+      <a href="../projet-balthazar.html" class="video-card">
+        <div class="video-card-thumb">
+          <img src="../assets/images/thumbs/thumb-balthazar.jpg" alt="Balthazar" loading="lazy">
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">Balthazar</div>
+          <div class="video-card-desc">10 mois de voyage en van et sac à dos, entre l'Europe et l'Asie.</div>
+        </div>
+      </a>
+
+      <a href="../projet-mts.html" class="video-card">
+        <div class="video-card-thumb">
+          <img src="../assets/images/thumbs/thumb-mts.jpg" alt="MTS" loading="lazy">
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">MTS</div>
+          <div class="video-card-desc">Une après-midi à Nevers Magny-Cours à la découverte du 1000 Tipla.</div>
+        </div>
+      </a>
+
+      <a href="../projet-roumanie.html" class="video-card">
+        <div class="video-card-thumb">
+          <img src="../assets/images/thumbs/thumb-roumanie.jpg" alt="Roumanie" loading="lazy">
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">Roumanie</div>
+          <div class="video-card-desc">15 jours au cœur de la Roumanie entre la ruralité, la montagne et la ville.</div>
+        </div>
+      </a>
+
+      <a href="../projet-nurburgring.html" class="video-card">
+        <div class="video-card-thumb">
+          <img src="../assets/images/thumbs/thumb-nurburgring.jpg" alt="L'Enfer Vert" loading="lazy">
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">L'Enfer Vert</div>
+          <div class="video-card-desc">3 jours sur le Nürburgring en BMW M3, la Mecque de l'automobile sportive.</div>
+        </div>
+      </a>
+
+      <a href="../projet-bolivie.html" class="video-card">
+        <div class="video-card-thumb">
+          <img src="../assets/images/thumbs/thumb-bolivie.jpg" alt="Bolivie" loading="lazy">
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">Bolivie</div>
+          <div class="video-card-desc">Grand amoureux de l'Europe de l'est et de l'Asie, l'Amérique du Sud a fini par me surprendre.</div>
+        </div>
+      </a>
+
+      <a href="../projet-armenie.html" class="video-card">
+        <div class="video-card-thumb">
+          <img src="../assets/images/thumbs/thumb-armenie.jpg" alt="Arménie" loading="lazy">
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">Arménie</div>
+          <div class="video-card-desc">L'Arménie, j'ai toujours voulu y aller. Est-ce qu'elle a été à la hauteur de mes attentes&nbsp;?</div>
+        </div>
+      </a>
+
+      <a href="../projet-malte.html" class="video-card">
+        <div class="video-card-thumb">
+          <img src="../assets/images/thumbs/thumb-malte.jpg" alt="Malte" loading="lazy">
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">Malte</div>
+          <div class="video-card-desc">Une île méditerranéenne entre histoire millénaire et modernité.</div>
+        </div>
+      </a>
+
+      <a href="../projet-planc.html" class="video-card">
+        <div class="video-card-thumb">
+          <img src="../assets/images/thumbs/thumb-planc.jpg" alt="Plan C" loading="lazy">
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">Plan C</div>
+          <div class="video-card-desc">Quand le plan A et le plan B tombent à l'eau, le plan C prend le relais.</div>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="../assets/components.js"></script>
+  <script>
+    injectNav('works');
+    injectFooter();
+  </script>
+</body>
+</html>
