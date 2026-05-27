@@ -30,12 +30,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(10,10,10,0.15) 0%,
-        rgba(10,10,10,0.0) 40%,
-        rgba(10,10,10,0.75) 100%
-      );
+      background: linear-gradient(to bottom, rgba(10,10,10,0.15) 0%, rgba(10,10,10,0.0) 40%, rgba(10,10,10,0.75) 100%);
       z-index: 1;
     }
 
@@ -49,8 +44,6 @@
       align-items: center;
       gap: 1.5rem;
     }
-
-    /* Signature centrale */
 
     .hero-title {
       font-family: 'Cormorant Garamond', Georgia, serif;
@@ -69,7 +62,6 @@
       font-family: 'Poppins', sans-serif;
       font-size: clamp(13px, 1.2vw, 15px);
       font-weight: 300;
-      letter-spacing: 0.02em;
       color: rgba(245,243,239,0.85);
       max-width: 480px;
       text-shadow: 0 1px 12px rgba(0,0,0,0.5);
@@ -78,7 +70,6 @@
       text-align: center;
     }
 
-    /* Ligne du bas : vignette + CTA */
     .hero-bottom {
       display: flex;
       align-items: center;
@@ -102,22 +93,96 @@
       border: 1px solid rgba(245,243,239,0.2);
       cursor: pointer;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: block;
     }
-    .hero-last-prod-thumb:hover {
-      transform: scale(1.04);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    }
+    .hero-last-prod-thumb:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
     .hero-last-prod-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
+    /* ---- Menu hamburger mobile ---- */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 1100;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #f5f3ef;
+      transition: all 0.3s ease;
+    }
+
+    .nav-mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,10,0.97);
+      z-index: 1050;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-menu a {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: #f5f3ef;
+      text-decoration: none;
+      opacity: 0.85;
+    }
+    .nav-mobile-menu a:hover { opacity: 1; }
+    .nav-mobile-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      color: #f5f3ef;
+      cursor: pointer;
+      opacity: 0.6;
+      background: none;
+      border: none;
+    }
+    .nav-mobile-close:hover { opacity: 1; }
+
+    /* ---- Responsive mobile ---- */
     @media (max-width: 700px) {
-      .hero-content { padding: 0 1.5rem 3rem; }
-      .hero-bottom { flex-direction: column; gap: 1.5rem; }
+      .hero-content {
+        padding: 0 1.5rem 2.5rem;
+        gap: 1rem;
+        /* Centrer verticalement pour que le CTA reste visible */
+        justify-content: flex-end;
+      }
+
+      .hero-tagline { font-size: 14px; }
+
+      .hero-bottom { flex-direction: column; gap: 1rem; }
+
+      .hero-last-prod-thumb { width: 130px; }
+
+      /* Cacher les liens nav sur mobile, afficher hamburger */
+      .nav-links { display: none !important; }
+      .nav-hamburger { display: flex; }
     }
   </style>
 </head>
 <body>
 
   <nav id="navbar"></nav>
+
+  <!-- Menu mobile plein écran -->
+  <div class="nav-mobile-menu" id="mobileMenu">
+    <button class="nav-mobile-close" onclick="closeMobileMenu()">✕</button>
+    <a href="works.html" onclick="closeMobileMenu()">Mon travail</a>
+    <a href="mesdestinations.html" onclick="closeMobileMenu()">Mes destinations</a>
+    <a href="about.html" onclick="closeMobileMenu()">À propos</a>
+    <a href="medias.html" onclick="closeMobileMenu()">Médias</a>
+    <a href="contact.html" onclick="closeMobileMenu()">Contact</a>
+  </div>
 
   <section id="hero">
     <video id="hero-video" autoplay muted loop playsinline>
@@ -142,7 +207,21 @@
   <script src="assets/components.js"></script>
   <script>
     injectNav('home');
-    // Pas de footer sur le hero plein écran
+
+    // Ajouter le hamburger dans la nav après injection
+    const nav = document.getElementById('navbar');
+    if (nav) {
+      const hamburger = document.createElement('button');
+      hamburger.className = 'nav-hamburger';
+      hamburger.setAttribute('aria-label', 'Menu');
+      hamburger.innerHTML = '<span></span><span></span><span></span>';
+      hamburger.onclick = () => document.getElementById('mobileMenu').classList.add('open');
+      nav.appendChild(hamburger);
+    }
+
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
   </script>
 </body>
 </html>
