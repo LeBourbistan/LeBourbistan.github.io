@@ -9,6 +9,19 @@ const PHOTO_BASE = {
   auto:      'assets/images/automobiles/'
 };
 
+// Déduit le dossier depuis le préfixe du nom de fichier quand galerie est null
+function inferFolder(filename) {
+  if (filename.startsWith('street-'))    return 'assets/images/streetphotos/';
+  if (filename.startsWith('landscape-')) return 'assets/images/landscapes/';
+  if (filename.startsWith('portrait-'))  return 'assets/images/portraits/';
+  if (filename.startsWith('auto-'))      return 'assets/images/automobiles/';
+  return 'assets/images/';
+}
+
+function getPhotoPath(filename, galerie) {
+  return ROOT + (galerie ? PHOTO_BASE[galerie] : inferFolder(filename)) + filename;
+}
+
 function getRoot() {
   const path = window.location.pathname;
   const knownSubfolders = ['works', 'destinations'];
@@ -23,9 +36,65 @@ async function loadData() {
   return await res.json();
 }
 
+/* ============================================================
+   LIGHTBOX — partagé entre galeries et destinations
+   ============================================================ */
+function initLightbox() {
+  // Créer le lightbox s'il n'existe pas encore
+  if (document.getElementById('lightbox')) return;
+
+  const lb = document.createElement('div');
+  lb.id = 'lightbox';
+  lb.innerHTML = `
+    <img id="lightbox-img" src="" alt="">
+    <div id="lightbox-caption"></div>
+  `;
+  lb.style.cssText = `
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.93); z-index:9999;
+    align-items:center; justify-content:center;
+    cursor:zoom-out; flex-direction:column; gap:1rem;
+  `;
+
+  const img = lb.querySelector('#lightbox-img');
+  img.style.cssText = 'max-width:90vw; max-height:85vh; object-fit:contain; border-radius:4px;';
+
+  const cap = lb.querySelector('#lightbox-caption');
+  cap.style.cssText = `
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-style:italic; font-size:15px;
+    color:rgba(245,243,239,0.7); pointer-events:none;
+  `;
+
+  document.body.appendChild(lb);
+
+  lb.addEventListener('click', () => closeLightbox());
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+}
+
+function openLightbox(src, caption) {
+  const lb = document.getElementById('lightbox');
+  if (!lb) return;
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-caption').textContent = caption || '';
+  lb.style.display = 'flex';
+}
+
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  if (lb) lb.style.display = 'none';
+}
+
+/* ============================================================
+   GALERIES
+   ============================================================ */
 async function buildGallery(type) {
   const container = document.getElementById('gallery-grid');
   if (!container) return;
+
+  initLightbox();
 
   const data  = await loadData();
   const items = Object.entries(data.photos)
@@ -40,26 +109,28 @@ async function buildGallery(type) {
   container.innerHTML = items.map(({ filename, caption }) => {
     const src = ROOT + PHOTO_BASE[type] + filename;
     return `
-      <div class="gallery-item">
+      <div class="gallery-item" style="cursor:zoom-in;" onclick="openLightbox('${src}','${(caption||'').replace(/'/g,"\\'")}')">
         <img src="${src}" alt="${caption || filename}" loading="lazy">
         ${caption ? `<div class="caption">${caption}</div>` : ''}
       </div>`;
   }).join('');
 }
 
+/* ============================================================
+   PAGE DESTINATION
+   ============================================================ */
 async function buildDestination(slug) {
   const data = await loadData();
   const dest = data.destinations[slug];
 
-  // Titre — extrait du JSON ou du slug formaté
+  initLightbox();
+
+  // Titre
   const titleEl = document.getElementById('destination-titre');
   if (titleEl) {
-    if (dest && dest.titre) {
-      titleEl.textContent = dest.titre;
-    } else {
-      // Formater le slug : 'saint-petersbourg' → 'Saint-Petersbourg'
-      titleEl.textContent = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-    }
+    titleEl.textContent = (dest && dest.titre)
+      ? dest.titre
+      : slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   }
 
   // Vidéos
@@ -69,7 +140,7 @@ async function buildDestination(slug) {
       videosEl.innerHTML = dest.videos.map(id => `
         <div class="video-embed">
           <iframe src="https://www.youtube.com/embed/${id}"
-            title="${dest.titre} — Le Bourbistan"
+            title="${dest ? dest.titre : slug} — Le Bourbistan"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen loading="lazy">
           </iframe>
@@ -93,10 +164,11 @@ async function buildDestination(slug) {
   }
 
   gridEl.innerHTML = photos.map(({ filename, galerie, caption }) => {
-    const src = ROOT + PHOTO_BASE[galerie] + filename;
+    const src = getPhotoPath(filename, galerie);
+    const cap = (caption || '').replace(/'/g, "\\'");
     return `
       <div class="destination-photo-item">
-        <div class="destination-photo-frame">
+        <div class="destination-photo-frame" style="cursor:zoom-in;" onclick="openLightbox('${src}','${cap}')">
           <img src="${src}" alt="${caption || filename}" loading="lazy">
           ${caption ? `<div class="photo-caption">${caption}</div>` : ''}
         </div>
