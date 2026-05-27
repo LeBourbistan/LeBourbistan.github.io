@@ -16,10 +16,6 @@
     .gallery-item:hover img { transform: scale(1.03); }
     .gallery-item .caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem 1rem 1rem; background: linear-gradient(transparent, rgba(0,0,0,0.7)); font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 13px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s ease; }
     .gallery-item:hover .caption { opacity: 1; transform: translateY(0); }
-    #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.93); z-index: 9999; align-items: center; justify-content: center; cursor: zoom-out; flex-direction: column; gap: 1rem; }
-    #lightbox.open { display: flex; }
-    #lightbox img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 4px; pointer-events: none; }
-    #lightbox-caption { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 15px; color: rgba(245,243,239,0.7); pointer-events: none; }
     @media (max-width: 700px) { #gallery-grid { columns: 1; } }
   </style>
 </head>
@@ -34,11 +30,6 @@
   </main>
   <footer id="footer"></footer>
 
-  <div id="lightbox">
-    <img id="lightbox-img" src="" alt="">
-    <div id="lightbox-caption"></div>
-  </div>
-
   <script src="../assets/components.js"></script>
   <script src="../assets/gallery.js"></script>
   <script>
@@ -46,25 +37,29 @@
     injectFooter();
     buildGallery('portrait');
 
-    // Lightbox — ouverture via délégation sur la grille
+    // Créer le lightbox directement sur document.body pour éviter tout conflit de stacking
+    var lb = document.createElement('div');
+    lb.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:99999;align-items:center;justify-content:center;cursor:zoom-out;flex-direction:column;gap:1rem;';
+    var lbImg = document.createElement('img');
+    lbImg.style.cssText = 'max-width:90vw;max-height:85vh;object-fit:contain;border-radius:4px;pointer-events:none;';
+    var lbCap = document.createElement('div');
+    lbCap.style.cssText = "font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:15px;color:rgba(245,243,239,0.7);pointer-events:none;";
+    lb.appendChild(lbImg);
+    lb.appendChild(lbCap);
+    document.body.appendChild(lb);
+
+    lb.addEventListener('click', function() { lb.style.display = 'none'; document.body.style.overflow = ''; });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { lb.style.display = 'none'; document.body.style.overflow = ''; } });
+
     document.getElementById('gallery-grid').addEventListener('click', function(e) {
-      const item = e.target.closest('.gallery-item');
+      var item = e.target.closest('.gallery-item');
       if (!item) return;
-      const img = item.querySelector('img');
-      const cap = item.querySelector('.caption');
-      document.getElementById('lightbox-img').src = img.src;
-      document.getElementById('lightbox-caption').textContent = cap ? cap.textContent : '';
-      document.getElementById('lightbox').classList.add('open');
-    });
-
-    // Fermeture au clic sur le fond
-    document.getElementById('lightbox').addEventListener('click', function() {
-      document.getElementById('lightbox').classList.remove('open');
-    });
-
-    // Fermeture à l'Echap
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open');
+      var img = item.querySelector('img');
+      var cap = item.querySelector('.caption');
+      lbImg.src = img.src;
+      lbCap.textContent = cap ? cap.textContent.trim() : '';
+      lb.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     });
   </script>
 </body>
