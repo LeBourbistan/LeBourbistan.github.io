@@ -1,8 +1,5 @@
 /* ============================================================
    LE BOURBISTAN — gallery.js
-   Lit photos.json et injecte dynamiquement :
-   - les galeries (street / landscape / portrait / auto)
-   - les pages destination (vidéos + grille photos)
    ============================================================ */
 
 const PHOTO_BASE = {
@@ -12,40 +9,26 @@ const PHOTO_BASE = {
   auto:      'assets/images/automobiles/'
 };
 
-// Calcul fiable du chemin racine selon la profondeur de la page
 function getRoot() {
   const path = window.location.pathname;
-  // Compter les segments après le repo GitHub Pages (ex: /LeBourbistan.github.io/)
-  const parts = path.replace(/\/$/, '').split('/').filter(Boolean);
-  // Sur GitHub Pages : parts[0] = repo name, parts[1..] = dossiers
-  // Sur domaine custom : parts[0..] = dossiers
-  // On cherche jusqu'où on est par rapport à index.html
-  const depth = parts.length > 0 && parts[parts.length - 1].endsWith('.html')
-    ? parts.length - 1
-    : parts.length;
-  // Heuristique : si on est dans destinations/ ou works/, depth=1 → ../
-  return depth > 0 ? '../'.repeat(depth) : './';
+  const knownSubfolders = ['works', 'destinations'];
+  const inSubfolder = knownSubfolders.some(f => path.includes('/' + f + '/'));
+  return inSubfolder ? '../' : './';
 }
 
 const ROOT = getRoot();
 
-// ---- Charger photos.json ----
 async function loadData() {
   const res = await fetch(ROOT + 'photos.json');
   return await res.json();
 }
 
-/* ============================================================
-   GALERIES
-   ============================================================ */
 async function buildGallery(type) {
   const container = document.getElementById('gallery-grid');
   if (!container) return;
 
-  const data   = await loadData();
-  const photos = data.photos;
-
-  const items = Object.entries(photos)
+  const data  = await loadData();
+  const items = Object.entries(data.photos)
     .filter(([, v]) => v.galerie === type)
     .map(([filename, v]) => ({ filename, ...v }));
 
@@ -64,26 +47,29 @@ async function buildGallery(type) {
   }).join('');
 }
 
-/* ============================================================
-   PAGE DESTINATION
-   ============================================================ */
 async function buildDestination(slug) {
   const data = await loadData();
   const dest = data.destinations[slug];
 
-  // ---- Titre ----
+  // Titre — extrait du JSON ou du slug formaté
   const titleEl = document.getElementById('destination-titre');
-  if (titleEl) titleEl.textContent = dest ? dest.titre : slug;
+  if (titleEl) {
+    if (dest && dest.titre) {
+      titleEl.textContent = dest.titre;
+    } else {
+      // Formater le slug : 'saint-petersbourg' → 'Saint-Petersbourg'
+      titleEl.textContent = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+  }
 
-  // ---- Vidéos ----
+  // Vidéos
   const videosEl = document.getElementById('destination-videos');
   if (videosEl) {
     if (dest && dest.videos && dest.videos.length > 0) {
       videosEl.innerHTML = dest.videos.map(id => `
         <div class="video-embed">
-          <iframe
-            src="https://www.youtube.com/embed/${id}"
-            title="${dest ? dest.titre : slug} — Le Bourbistan"
+          <iframe src="https://www.youtube.com/embed/${id}"
+            title="${dest.titre} — Le Bourbistan"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen loading="lazy">
           </iframe>
@@ -93,7 +79,7 @@ async function buildDestination(slug) {
     }
   }
 
-  // ---- Grille photos ----
+  // Photos
   const gridEl = document.getElementById('destination-photos');
   if (!gridEl) return;
 
@@ -102,7 +88,7 @@ async function buildDestination(slug) {
     .map(([filename, v]) => ({ filename, ...v }));
 
   if (photos.length === 0) {
-    gridEl.style.display = 'none';
+    gridEl.innerHTML = '<p style="opacity:0.4;font-style:italic;grid-column:1/-1;">Pas encore de photo disponible pour cette destination — continuez à explorer&nbsp;!</p>';
     return;
   }
 
