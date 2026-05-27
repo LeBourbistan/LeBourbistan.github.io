@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plan C | Le Bourbistan</title>
+  <meta name="description" content="Turquie, Géorgie, Irak — quand le plan A et le plan B tombent à l'eau, le plan C prend le relais.">
   <link rel="stylesheet" href="assets/style.css">
   <style>
     .projet-wrap { padding-top: calc(var(--nav-h) + 5rem); padding-bottom: 4rem; max-width: 1200px; margin: 0 auto; padding-left: 2rem; padding-right: 2rem; }
     .projet-top { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-bottom: 4rem; }
-    .projet-text h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2.2rem,4vw,3.5rem); font-weight: 500; margin-bottom: 2rem; animation: fadeUp 0.8s ease both; }
+    .projet-text h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 500; margin-bottom: 2rem; animation: fadeUp 0.8s ease both; }
     .projet-text .body { display: flex; flex-direction: column; gap: 1.2rem; animation: fadeUp 0.8s ease both; animation-delay: 0.15s; }
     .projet-text .body p { font-size: 15px; font-weight: 300; line-height: 1.85; color: rgba(245,243,239,0.85); }
-    .projet-photo-col { animation: fadeUp 0.8s ease both; animation-delay: 0.2s; }
+    .projet-text .body p strong { color: var(--white); font-weight: 500; }
+    .projet-photo-col { position: relative; animation: fadeUp 0.8s ease both; animation-delay: 0.2s; }
     .projet-photo-main { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; background: #111; }
-    .projet-photo-main img { width: 100%; height: 100%; object-fit: contain;
-      background: #0a0a0a; }
-    .photo-sig { position: absolute; bottom: 1rem; right: 1.2rem; opacity: 0.55; }
-    .photo-sig svg { width: 70px; }
-    .projet-video-section h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.8rem; font-weight: 500; margin-bottom: 1.5rem; opacity: 0.7; }
-    .video-embed { position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: #111; max-width: 700px; }
-    .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-    @media (max-width: 900px) { .projet-top { grid-template-columns: 1fr; gap: 2.5rem; } }
+    .projet-photo-main img { width: 100%; height: 100%; object-fit: contain; background: #0a0a0a; }
+    .projet-videos-section { margin-top: 1rem; }
+    .projet-videos-section h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.8rem; font-weight: 500; margin-bottom: 2rem; opacity: 0.7; }
+    .projet-videos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+    .video-thumb-card { display: flex; flex-direction: column; gap: 0.6rem; cursor: pointer; transition: opacity var(--transition); text-decoration: none; color: inherit; }
+    .video-thumb-card:hover { opacity: 0.85; }
+    .video-thumb-img { position: relative; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #1a1a1a; }
+    .video-thumb-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .video-thumb-card:hover .video-thumb-img img { transform: scale(1.05); }
+    .video-thumb-img::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.2); transition: background var(--transition); }
+    .video-thumb-card:hover .video-thumb-img::after { background: rgba(0,0,0,0.1); }
+    .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 36px; height: 36px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2; backdrop-filter: blur(4px); }
+    .play-icon svg { width: 12px; height: 12px; fill: white; margin-left: 2px; }
+    .video-thumb-title { font-size: 12px; font-weight: 400; line-height: 1.4; color: rgba(245,243,239,0.8); }
+    .video-thumb-date { font-size: 11px; opacity: 0.4; }
+    @media (max-width: 900px) { .projet-top { grid-template-columns: 1fr; gap: 2.5rem; } .projet-videos-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .projet-videos-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -40,95 +52,57 @@
         </div>
       </div>
     </div>
-            <div class="projet-videos-section">
+    <div class="projet-videos-section">
       <h2>Les épisodes</h2>
       <div class="projet-videos-grid">
         <a href="https://www.youtube.com/watch?v=PBHmRM4AqP8" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/PBHmRM4AqP8/mqdefault.jpg" alt="1/10 — ISTANBUL" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">ISTANBUL</div>
-          <div class="video-thumb-date">1/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/PBHmRM4AqP8/mqdefault.jpg" alt="1/10 ISTANBUL" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">ISTANBUL</div><div class="video-thumb-date">1/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=oA9N1jkU8UI" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/oA9N1jkU8UI/mqdefault.jpg" alt="2/10 — Plan C — épisode 2" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">Plan C — épisode 2</div>
-          <div class="video-thumb-date">2/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/oA9N1jkU8UI/mqdefault.jpg" alt="2/10" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">Plan C — épisode 2</div><div class="video-thumb-date">2/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=vaM_K91Lzvo" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/vaM_K91Lzvo/mqdefault.jpg" alt="3/10 — GÉORGIE — Tbilissi & Goris" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">GÉORGIE — Tbilissi & Goris</div>
-          <div class="video-thumb-date">3/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/vaM_K91Lzvo/mqdefault.jpg" alt="3/10 GÉORGIE" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">GÉORGIE — Tbilissi & Goris</div><div class="video-thumb-date">3/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=KGU-b3n7ZgA" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/KGU-b3n7ZgA/mqdefault.jpg" alt="4/10 — GÉORGIE — Tskaltubo & Stepantsminda" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">GÉORGIE — Tskaltubo & Stepantsminda</div>
-          <div class="video-thumb-date">4/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/KGU-b3n7ZgA/mqdefault.jpg" alt="4/10 GÉORGIE" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">GÉORGIE — Tskaltubo & Stepantsminda</div><div class="video-thumb-date">4/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=gfH6dO-2VkQ" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/gfH6dO-2VkQ/mqdefault.jpg" alt="5/10 — KARS — La ville aux portes de l'Arménie" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">KARS — La ville aux portes de l'Arménie</div>
-          <div class="video-thumb-date">5/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/gfH6dO-2VkQ/mqdefault.jpg" alt="5/10 KARS" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">KARS — La ville aux portes de l'Arménie</div><div class="video-thumb-date">5/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=JH6w53DwRdg" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/JH6w53DwRdg/mqdefault.jpg" alt="6/10 — VAN — Ce pays N'EXISTE PAS" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">VAN — Ce pays N'EXISTE PAS</div>
-          <div class="video-thumb-date">6/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/JH6w53DwRdg/mqdefault.jpg" alt="6/10 VAN" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">VAN — Ce pays N'EXISTE PAS</div><div class="video-thumb-date">6/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=oFts7K6z4hE" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/oFts7K6z4hE/mqdefault.jpg" alt="7/10 — DIYARBAKIR — Le cœur du Kurdistan" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">DIYARBAKIR — Le cœur du Kurdistan</div>
-          <div class="video-thumb-date">7/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/oFts7K6z4hE/mqdefault.jpg" alt="7/10 DIYARBAKIR" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">DIYARBAKIR — Le cœur du Kurdistan</div><div class="video-thumb-date">7/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=JC9PNWp-5zw" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/JC9PNWp-5zw/mqdefault.jpg" alt="8/10 — ERBIL — Capitale du Kurdistan irakien" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">ERBIL — Capitale du Kurdistan irakien</div>
-          <div class="video-thumb-date">8/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/JC9PNWp-5zw/mqdefault.jpg" alt="8/10 ERBIL" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">ERBIL — Capitale du Kurdistan irakien</div><div class="video-thumb-date">8/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=C35xvAxbrzY" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/C35xvAxbrzY/mqdefault.jpg" alt="9/10 — SULAYMANIYAH — L'autre capitale kurde" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">SULAYMANIYAH — L'autre capitale kurde</div>
-          <div class="video-thumb-date">9/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/C35xvAxbrzY/mqdefault.jpg" alt="9/10 SULAYMANIYAH" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">SULAYMANIYAH — L'autre capitale kurde</div><div class="video-thumb-date">9/10</div>
         </a>
         <a href="https://www.youtube.com/watch?v=TpUVvtS6y0U" target="_blank" rel="noopener" class="video-thumb-card">
-          <div class="video-thumb-img">
-            <img src="https://img.youtube.com/vi/TpUVvtS6y0U/mqdefault.jpg" alt="10/10 — Plan C — épisode final" loading="lazy">
-            <div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div>
-          </div>
-          <div class="video-thumb-title">Plan C — épisode final</div>
-          <div class="video-thumb-date">10/10</div>
+          <div class="video-thumb-img"><img src="https://img.youtube.com/vi/TpUVvtS6y0U/mqdefault.jpg" alt="10/10 final" loading="lazy"><div class="play-icon"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12" fill="white"/></svg></div></div>
+          <div class="video-thumb-title">Plan C — épisode final</div><div class="video-thumb-date">10/10</div>
         </a>
       </div>
     </div>
-
   </main>
   <footer id="footer"></footer>
   <script src="assets/components.js"></script>
-  <script>injectNav('works'); injectFooter();</script>
+  <script>
+    injectNav('works');
+    injectFooter();
+  </script>
 </body>
 </html>
