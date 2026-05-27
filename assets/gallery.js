@@ -74,7 +74,7 @@ function initLightbox() {
   `;
 
   const img = lb.querySelector('#lightbox-img');
-  img.style.cssText = 'max-width:90vw; max-height:85vh; object-fit:contain; border-radius:4px;';
+  img.style.cssText = 'max-width:90vw; max-height:85vh; object-fit:contain; border-radius:4px; pointer-events:none;';
 
   const cap = lb.querySelector('#lightbox-caption');
   cap.style.cssText = `
@@ -85,6 +85,8 @@ function initLightbox() {
 
   document.body.appendChild(lb);
 
+  // Clic n'importe où sur le lightbox ferme — pointer-events:none sur img et caption
+  // garantit que le clic remonte toujours jusqu'au conteneur
   lb.addEventListener('click', () => closeLightbox());
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeLightbox();
