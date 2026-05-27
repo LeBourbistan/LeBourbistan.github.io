@@ -1,107 +1,107 @@
 {
   "photos": {
     "landscape-001.jpg": {
-      "destination": null,
+      "destination": "uyuni",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Un des nombreux langons du déser d'Uyuni"
     },
     "landscape-002.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "landscape",
-      "caption": null
+      "caption": "La splendeur du parc Ala Archa, proche de Bichkek"
     },
     "landscape-003.jpg": {
-      "destination": null,
+      "destination": "malang",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Les reliefs à proximité du mont Bromo"
     },
     "landscape-004.jpg": {
-      "destination": null,
+      "destination": "malang",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Le mont Bromo"
     },
     "landscape-005.jpg": {
-      "destination": null,
+      "destination": "athenes",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Le pont Rion-Antirion"
     },
     "landscape-006.jpg": {
-      "destination": null,
+      "destination": "hsinchu",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Le Lion's Head Temple"
     },
     "landscape-007.jpg": {
       "destination": null,
-      "galerie": "landscape",
+      "galerie": null,
       "caption": null
     },
     "landscape-008.jpg": {
-      "destination": null,
+      "destination": "hualien",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Vue depuis les hauteurs de Jiufen"
     },
     "landscape-009.jpg": {
       "destination": null,
-      "galerie": "landscape",
+      "galerie": null,
       "caption": null
     },
     "landscape-010.jpg": {
       "destination": null,
-      "galerie": "landscape",
+      "galerie": null,
       "caption": null
     },
     "landscape-011.jpg": {
       "destination": null,
-      "galerie": "landscape",
+      "galerie": null,
       "caption": null
     },
     "landscape-012.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Les montagnes aux portes de la ville"
     },
     "landscape-013.jpg": {
-      "destination": null,
+      "destination": "naryn",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Petite rando sur les reliefs de Naryn"
     },
     "landscape-015.jpg": {
-      "destination": null,
+      "destination": "murghab",
       "galerie": "landscape",
-      "caption": null
+      "caption": "La première chose qu'on voit en arrivant au Tadjikistan par le nord du Haut-Badakhchan : Qaraqul"
     },
     "landscape-016.jpg": {
-      "destination": null,
+      "destination": "murghab",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Les paysages iréels du Tadjikistan, encore et encore"
     },
     "landscape-017.jpg": {
-      "destination": null,
+      "destination": "murghab",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Le vide vertigineux de l'autoroute du Pamir"
     },
     "landscape-018.jpg": {
-      "destination": null,
+      "destination": "miyazaki",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Les côtes du sud du Japon"
     },
     "landscape-019.jpg": {
-      "destination": null,
+      "destination": "miyazaki",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Les côtes du sud du Japon"
     },
     "landscape-020.jpg": {
-      "destination": null,
+      "destination": "miyazaki",
       "galerie": "landscape",
       "caption": null
     },
     "landscape-021.jpg": {
-      "destination": null,
+      "destination": "malang",
       "galerie": "landscape",
       "caption": null
     },
     "landscape-022.jpg": {
-      "destination": null,
+      "destination": "malang",
       "galerie": "landscape",
       "caption": null
     },
@@ -126,267 +126,267 @@
       "caption": null
     },
     "landscape-027.jpg": {
-      "destination": null,
+      "destination": "tbilisi",
       "galerie": "landscape",
       "caption": null
     },
     "landscape-028.jpg": {
-      "destination": null,
+      "destination": "sulaymaniyah",
       "galerie": "landscape",
       "caption": null
     },
     "landscape-029.jpg": {
-      "destination": null,
+      "destination": "erbil",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Mon fidèle destrier irakien : la Nissan Sunny"
     },
     "landscape-030.jpg": {
-      "destination": null,
+      "destination": "yerevan",
       "galerie": "landscape",
-      "caption": null
+      "caption": "Le magnifique Mont Ararat, le plus important des symboles arméniens"
     },
     "auto-001.jpg": {
-      "destination": null,
+      "destination": "miyazaki",
       "galerie": "auto",
       "caption": null
     },
     "auto-002.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-003.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-004.jpg": {
       "destination": null,
-      "galerie": "auto",
+      "galerie": null,
       "caption": null
     },
     "auto-005.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-006.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-007.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-008.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-009.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-010.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-011.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-012.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "auto",
       "caption": null
     },
     "auto-013.jpg": {
-      "destination": null,
+      "destination": "zagreb",
       "galerie": "auto",
       "caption": null
     },
     "auto-016.jpg": {
-      "destination": null,
-      "galerie": "auto",
+      "destination": "yerevan",
+      "galerie": null,
       "caption": null
     },
     "portrait-001.jpg": {
-      "destination": null,
+      "destination": "douchanbe",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-002.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "moscou",
+      "galerie": "street",
       "caption": null
     },
     "portrait-003.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "moscou",
+      "galerie": null,
       "caption": null
     },
     "portrait-004.jpg": {
-      "destination": null,
+      "destination": "moscou",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-005.jpg": {
-      "destination": null,
+      "destination": "saint-petersbourg",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-006.jpg": {
-      "destination": null,
+      "destination": "tapei",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-007.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "portrait",
-      "caption": null
+      "caption": "Sans doute ma photo préférée parmi toutes celles que j'ai prises"
     },
     "portrait-008.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "bishkek",
+      "galerie": null,
       "caption": null
     },
     "portrait-009.jpg": {
-      "destination": null,
+      "destination": "xiamen",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-010.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "bishkek",
+      "galerie": null,
       "caption": null
     },
     "portrait-011.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-012.jpg": {
-      "destination": null,
+      "destination": "manille",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-013.jpg": {
-      "destination": null,
+      "destination": "daegu",
       "galerie": "portrait",
-      "caption": null
+      "caption": "La cousine Jeanne"
     },
     "portrait-014.jpg": {
-      "destination": null,
+      "destination": "daegu",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-015.jpg": {
       "destination": null,
-      "galerie": "portrait",
+      "galerie": null,
       "caption": null
     },
     "portrait-016.jpg": {
-      "destination": null,
+      "destination": "osh",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-017.jpg": {
-      "destination": null,
+      "destination": "murghab",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-018.jpg": {
-      "destination": null,
+      "destination": "fukuoka",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-019.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "ishkashim",
+      "galerie": null,
       "caption": null
     },
     "portrait-020.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "ishkashim",
+      "galerie": null,
       "caption": null
     },
     "portrait-022.jpg": {
-      "destination": null,
+      "destination": "bali",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-023.jpg": {
       "destination": null,
-      "galerie": "portrait",
+      "galerie": null,
       "caption": null
     },
     "portrait-024.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "yogyakarta",
+      "galerie": null,
       "caption": null
     },
     "portrait-025.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "yogyakarta",
+      "galerie": null,
       "caption": null
     },
     "portrait-026.jpg": {
-      "destination": null,
+      "destination": "phnom-penh",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-027.jpg": {
-      "destination": null,
+      "destination": "siem-reap",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-028.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "siem-reap",
+      "galerie": null,
       "caption": null
     },
     "portrait-029.jpg": {
-      "destination": null,
+      "destination": "phnom-penh",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-030.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "almaty",
+      "galerie": null,
       "caption": null
     },
     "portrait-031.jpg": {
-      "destination": null,
+      "destination": "almaty",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-032.jpg": {
-      "destination": null,
+      "destination": "barskoon",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-033.jpg": {
-      "destination": null,
+      "destination": "issyk-kol",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-034.jpg": {
-      "destination": null,
+      "destination": "issyk-kol",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-035.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "portrait",
       "caption": null
     },
     "portrait-036.jpg": {
-      "destination": null,
+      "destination": "siem-reap",
       "galerie": "portrait",
       "caption": null
     },
@@ -396,17 +396,17 @@
       "caption": null
     },
     "portrait-038.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "siem-reap",
+      "galerie": null,
       "caption": null
     },
     "portrait-039.jpg": {
-      "destination": null,
-      "galerie": "portrait",
+      "destination": "siem-reap",
+      "galerie": null,
       "caption": null
     },
     "portrait-040.jpg": {
-      "destination": null,
+      "destination": "koh-rong-samloem",
       "galerie": "portrait",
       "caption": null
     },
@@ -416,87 +416,87 @@
       "caption": null
     },
     "street-001.jpg": {
-      "destination": null,
+      "destination": "douchanbe",
       "galerie": "street",
       "caption": null
     },
     "street-002.jpg": {
       "destination": null,
-      "galerie": "street",
+      "galerie": null,
       "caption": null
     },
     "street-003.jpg": {
-      "destination": null,
+      "destination": "douchanbe",
       "galerie": "street",
       "caption": null
     },
     "street-004.jpg": {
-      "destination": null,
+      "destination": "tashkent",
       "galerie": "street",
       "caption": null
     },
     "street-005.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "tashkent",
+      "galerie": null,
       "caption": null
     },
     "street-006.jpg": {
-      "destination": null,
+      "destination": "tashkent",
       "galerie": "street",
       "caption": null
     },
     "street-007.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "moscou",
+      "galerie": null,
       "caption": null
     },
     "street-011.jpg": {
-      "destination": null,
+      "destination": "moscou",
       "galerie": "street",
       "caption": null
     },
     "street-013.jpg": {
-      "destination": null,
+      "destination": "moscou",
       "galerie": "street",
       "caption": null
     },
     "street-015.jpg": {
-      "destination": null,
+      "destination": "moscou",
       "galerie": "street",
       "caption": null
     },
     "street-017.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "moscou",
+      "galerie": null,
       "caption": null
     },
     "street-018.jpg": {
-      "destination": null,
+      "destination": "moscou",
       "galerie": "street",
       "caption": null
     },
     "street-024.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "moscou",
+      "galerie": null,
       "caption": null
     },
     "street-027.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "saint-petersbourg",
+      "galerie": null,
       "caption": null
     },
     "street-028.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "saint-petersbourg",
+      "galerie": null,
       "caption": null
     },
     "street-029.jpg": {
-      "destination": null,
+      "destination": "saint-petersbourg",
       "galerie": "street",
       "caption": null
     },
     "street-030.jpg": {
-      "destination": null,
+      "destination": "saint-petersbourg",
       "galerie": "street",
       "caption": null
     },
@@ -506,282 +506,282 @@
       "caption": null
     },
     "street-033.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "saint-petersbourg",
+      "galerie": null,
       "caption": null
     },
     "street-034.jpg": {
       "destination": null,
-      "galerie": "street",
+      "galerie": null,
       "caption": null
     },
     "street-035.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "hsinchu",
+      "galerie": null,
       "caption": null
     },
     "street-036.jpg": {
-      "destination": null,
+      "destination": "hsinchu",
       "galerie": "street",
       "caption": null
     },
     "street-037.jpg": {
-      "destination": null,
+      "destination": "hualien",
       "galerie": "street",
       "caption": null
     },
     "street-038.jpg": {
       "destination": null,
-      "galerie": "street",
+      "galerie": null,
       "caption": null
     },
     "street-039.jpg": {
-      "destination": null,
+      "destination": "hualien",
       "galerie": "street",
       "caption": null
     },
     "street-040.jpg": {
-      "destination": null,
+      "destination": "taipei",
       "galerie": "street",
       "caption": null
     },
     "street-041.jpg": {
       "destination": null,
-      "galerie": "street",
+      "galerie": null,
       "caption": null
     },
     "street-042.jpg": {
-      "destination": null,
+      "destination": "hualien",
       "galerie": "street",
       "caption": null
     },
     "street-043.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "hualien",
+      "galerie": null,
       "caption": null
     },
     "street-044.jpg": {
-      "destination": null,
+      "destination": "hualien",
       "galerie": "street",
       "caption": null
     },
     "street-045.jpg": {
-      "destination": null,
+      "destination": "taipei",
       "galerie": "street",
       "caption": null
     },
     "street-046.jpg": {
-      "destination": null,
+      "destination": "taipei",
       "galerie": "street",
       "caption": null
     },
     "street-047.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "street",
       "caption": null
     },
     "street-048.jpg": {
-      "destination": null,
+      "destination": "sary-chelek",
       "galerie": "street",
       "caption": null
     },
     "street-049.jpg": {
-      "destination": null,
+      "destination": "shenzhen",
       "galerie": "street",
       "caption": null
     },
     "street-050.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "street",
       "caption": null
     },
     "street-051.jpg": {
       "destination": null,
-      "galerie": "street",
+      "galerie": null,
       "caption": null
     },
     "street-052.jpg": {
-      "destination": null,
+      "destination": "seoul",
       "galerie": "street",
       "caption": null
     },
     "street-053.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "street",
       "caption": null
     },
     "street-054.jpg": {
-      "destination": null,
+      "destination": "bishkek",
       "galerie": "street",
       "caption": null
     },
     "street-055.jpg": {
-      "destination": null,
+      "destination": "daegu",
       "galerie": "street",
       "caption": null
     },
     "street-056.jpg": {
-      "destination": null,
+      "destination": "daegu",
       "galerie": "street",
       "caption": null
     },
     "street-057.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "busan",
+      "galerie": null,
       "caption": null
     },
     "street-058.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "busan",
+      "galerie": null,
       "caption": null
     },
     "street-059.jpg": {
-      "destination": null,
+      "destination": "osh",
       "galerie": "street",
       "caption": null
     },
     "street-060.jpg": {
-      "destination": null,
+      "destination": "osh",
       "galerie": "street",
       "caption": null
     },
     "street-061.jpg": {
-      "destination": null,
+      "destination": "busan",
       "galerie": "street",
       "caption": null
     },
     "street-062.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "busan",
+      "galerie": null,
       "caption": null
     },
     "street-063.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "busan",
+      "galerie": null,
       "caption": null
     },
     "street-064.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "fukuoka",
+      "galerie": null,
       "caption": null
     },
     "street-065.jpg": {
-      "destination": null,
+      "destination": "fukuoka",
       "galerie": "street",
       "caption": null
     },
     "street-066.jpg": {
-      "destination": null,
+      "destination": "miyazaki",
       "galerie": "street",
       "caption": null
     },
     "street-067.jpg": {
       "destination": null,
-      "galerie": "street",
+      "galerie": null,
       "caption": null
     },
     "street-068.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "miyazaki",
+      "galerie": null,
       "caption": null
     },
     "street-069.jpg": {
-      "destination": null,
+      "destination": "miyazaki",
       "galerie": "street",
       "caption": null
     },
     "street-070.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "street",
       "caption": null
     },
     "street-071.jpg": {
-      "destination": null,
+      "destination": "yokohama",
       "galerie": "street",
       "caption": null
     },
     "street-073.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "manille",
+      "galerie": null,
       "caption": null
     },
     "street-075.jpg": {
-      "destination": null,
+      "destination": "malang",
       "galerie": "street",
       "caption": null
     },
     "street-076.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "malang",
+      "galerie": null,
       "caption": null
     },
     "street-077.jpg": {
-      "destination": null,
+      "destination": "yogyakarta",
       "galerie": "street",
       "caption": null
     },
     "street-078.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "zagreb",
+      "galerie": null,
       "caption": null
     },
     "street-079.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "zagreb",
+      "galerie": null,
       "caption": null
     },
     "street-080.jpg": {
-      "destination": null,
+      "destination": "zagreb",
       "galerie": "street",
       "caption": null
     },
     "street-081.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "zagreb",
+      "galerie": null,
       "caption": null
     },
     "street-082.jpg": {
-      "destination": null,
+      "destination": "zagreb",
       "galerie": "street",
       "caption": null
     },
     "street-083.jpg": {
-      "destination": null,
+      "destination": "zagreb",
       "galerie": "street",
       "caption": null
     },
     "street-084.jpg": {
-      "destination": null,
+      "destination": "tbilisi",
       "galerie": "street",
       "caption": null
     },
     "street-085.jpg": {
-      "destination": null,
+      "destination": "erbil",
       "galerie": "street",
       "caption": null
     },
     "street-086.jpg": {
       "destination": null,
-      "galerie": "street",
+      "galerie": null,
       "caption": null
     },
     "street-087.jpg": {
       "destination": null,
-      "galerie": "street",
+      "galerie": null,
       "caption": null
     },
     "street-088.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "erbil",
+      "galerie": null,
       "caption": null
     },
     "street-089.jpg": {
-      "destination": null,
-      "galerie": "street",
+      "destination": "erbil",
+      "galerie": null,
       "caption": null
     },
     "street-090.jpg": {
-      "destination": null,
+      "destination": "bucarest",
       "galerie": "street",
       "caption": null
     }
