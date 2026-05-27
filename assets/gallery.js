@@ -23,10 +23,27 @@ function getPhotoPath(filename, galerie) {
 }
 
 function getRoot() {
-  const path = window.location.pathname;
-  const knownSubfolders = ['works', 'destinations'];
-  const inSubfolder = knownSubfolders.some(f => path.includes('/' + f + '/'));
-  return inSubfolder ? '../' : './';
+  // Compte les segments de dossier dans le pathname
+  // /destinations/moscou.html → 1 dossier → '../'
+  // /works/streetphotos.html  → 1 dossier → '../'
+  // /index.html ou /about.html → 0 dossier → './'
+  const parts = window.location.pathname
+    .replace(/\/+$/, '')   // enlever slash final
+    .split('/')
+    .filter(Boolean);       // enlever segments vides
+  
+  // Le dernier segment est le fichier .html — on compte les dossiers avant
+  const depth = parts.length > 0 && parts[parts.length - 1].includes('.html')
+    ? parts.length - 1
+    : parts.length;
+
+  // Sur GitHub Pages sans domaine custom : /LeBourbistan.github.io/destinations/moscou.html
+  // → parts = ['LeBourbistan.github.io', 'destinations', 'moscou.html'] → depth = 2 → '../../'
+  // Sur domaine custom : /destinations/moscou.html → depth = 1 → '../'
+  // Sur racine : /index.html → depth = 0 → './'
+  
+  if (depth === 0) return './';
+  return '../'.repeat(depth);
 }
 
 const ROOT = getRoot();
