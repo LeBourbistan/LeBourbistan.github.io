@@ -125,10 +125,11 @@ async function buildGallery(type) {
 
   container.innerHTML = items.map(({ filename, caption }) => {
     const src = ROOT + PHOTO_BASE[type] + filename;
+    const cap = (caption || '').replace(/'/g, "\\'");
     return `
-      <div class="gallery-item" style="cursor:zoom-in;" onclick="openLightbox('${src}','${(caption||'').replace(/'/g,"\\'")}')">
-        <img src="${src}" alt="${caption || filename}" loading="lazy">
-        ${caption ? `<div class="caption">${caption}</div>` : ''}
+      <div class="gallery-item" style="cursor:zoom-in;" onclick="openLightbox('${src}','${cap}')">
+        <img src="${src}" alt="${caption || filename}" loading="lazy" style="pointer-events:none;">
+        ${caption ? `<div class="caption" style="pointer-events:none;">${caption}</div>` : ''}
       </div>`;
   }).join('');
 }
