@@ -27,6 +27,15 @@ function injectNav(activePage) {
 
   const root = getPageRoot();
 
+  // Favicon — injecté une seule fois
+  if (!document.querySelector('link[rel="icon"]')) {
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.type = 'image/png';
+    favicon.href = root + 'assets/identity/favicon.png';
+    document.head.appendChild(favicon);
+  }
+
   nav.innerHTML = `
     <a href="${root}index.html" class="nav-logo" aria-label="Accueil Le Bourbistan">
       <img src="${root}assets/identity/KetK.png" alt="Le Bourbistan" style="height:36px;width:auto;object-fit:contain;">
