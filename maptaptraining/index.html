@@ -210,7 +210,7 @@ svg text{font-family:var(--mono)}
 /* =========================================================
    CONFIG
    ========================================================= */
-const MAPBOX_TOKEN = 'pk.eyJ1IjoibGVib3VyYmlzdGFuIiwiYSI6ImNtcnV3aXBibzAydXAyenM1eHY3ZnQzZTkifQ._8SdrGD8C4i2zIuleVjppA';
+const MAPBOX_TOKEN = 'PASTE_YOUR_PUBLIC_TOKEN_HERE';
 
 // Score table = lower envelope of 26 real MapTap rounds (the strictest round wins).
 // [km, score] pairs, interpolated linearly in log(1 + km). Add new real pairs here;
@@ -224,14 +224,15 @@ const TARGETS = [{v: 915, l: 'you now'}, {v: 930, l: 'friend 1'}, {v: 955, l: 'f
 const SRS_DAYS = [0, 1, 3, 7, 16, 35]; // Leitner intervals; past the last box the place is mastered
 const RECENT_AVOID = 300;           // do not repeat a place within this many rounds
 const HIST_TTL_DAYS = 30;
+const DATA_V = 5;                   // bump when places.json or admin1.json change, so browsers refetch
 const LS = 'tt.v1.';
 const STYLES = {
   satellite: 'mapbox://styles/mapbox/satellite-v9',
   terrain: 'mapbox://styles/mapbox/outdoors-v12',
   dark: 'mapbox://styles/mapbox/dark-v11'
 };
-const DEFAULTS = {v: 2, mode: 'game', style: 'satellite', maxZoom: 10, confirm: true,
-  kinds: {city: true, battle: true, site: true}, tmin: 1, tmax: 5, region: 'all', weak: false, miss: 90, grad: 95};
+const DEFAULTS = {v: 3, mode: 'game', style: 'satellite', maxZoom: 10, confirm: true,
+  kinds: {city: true, battle: true, site: true}, tmin: 1, tmax: 5, region: 'all', weak: false, miss: 95, grad: 97};
 
 /* =========================================================
    STORAGE (localStorage can throw or be empty, so wrap it)
@@ -243,6 +244,7 @@ const store = {
 let settings = Object.assign({}, DEFAULTS, store.get('settings', {}));
 settings.kinds = Object.assign({}, DEFAULTS.kinds, settings.kinds || {});
 if (!(settings.v >= 2)) { settings.maxZoom = Math.max(settings.maxZoom || 0, DEFAULTS.maxZoom); settings.v = 2; } // v1 shipped a too-tight zoom cap
+if (settings.v < 3) { settings.miss = Math.max(settings.miss || 0, 95); settings.grad = Math.max(settings.grad || 0, 97); settings.v = 3; } // stricter review
 let log = store.get('log', []);       // {t,id,s,d,m,k,g}  g = region
 let games = store.get('games', []);   // {t,total,r:[{id,s,d,x}]}
 let srs = store.get('srs', {});       // id -> {b,due,n,last}
@@ -299,14 +301,14 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', 
    ========================================================= */
 let COUNTRIES = {}, CITIES = [], HIST = [], BYID = new Map(), REGIONS = [];
 function placeLabel(p) {
-  if (p.kind === 'battle') return {main: p.name, small: [p.country, p.year != null ? fmtYear(p.year) : ''].filter(Boolean).join(', ')};
-  if (p.kind === 'site') return {main: p.name, small: p.country || ''};
+  if (p.kind === 'battle') return {main: p.name, small: [p.state, p.country, p.year != null ? fmtYear(p.year) : ''].filter(Boolean).join(', ')};
+  if (p.kind === 'site') return {main: p.name, small: [p.state, p.country].filter(Boolean).join(', ')};
   if (p.state === 'Crimea') return {main: p.name, small: 'Crimea'};
   const parts = [p.state, p.country].filter(Boolean);
   return {main: p.name, small: parts.join(', ')};
 }
 async function loadCities() {
-  const r = await fetch('places.json', {cache: 'force-cache'});
+  const r = await fetch('places.json?v=' + DATA_V);
   if (!r.ok) throw new Error('places.json ' + r.status);
   const d = await r.json();
   COUNTRIES = d.countries;
@@ -377,6 +379,37 @@ async function loadHistory(force = false) {
     return cached ? cached.rows : [];
   }
 }
+// Admin-1 polygons (states, provinces, UK nations) for big countries, used to name the region of battles and sites.
+let ADMIN1 = [];
+async function loadAdmin1() {
+  try {
+    const r = await fetch('admin1.json?v=' + DATA_V); if (!r.ok) throw new Error(r.status);
+    ADMIN1 = (await r.json()).map(([cc, name, rings]) => {
+      let x0 = 180, y0 = 90, x1 = -180, y1 = -90;
+      for (const ring of rings) for (const [x, y] of ring) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+      return {cc, name, rings, bb: [x0, y0, x1, y1]};
+    });
+  } catch (e) { console.warn('admin1 load failed', e); }
+}
+function inRing(x, y, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+function adminOf(cc, lat, lon) {
+  const units = ADMIN1.filter(u => u.cc === cc);
+  if (!units.length) return '';
+  for (const u of units) {
+    const b = u.bb; if (lon < b[0] || lon > b[2] || lat < b[1] || lat > b[3]) continue;
+    if (u.rings.some(r => inRing(lon, lat, r))) return u.name;
+  }
+  // coast or simplified border: borrow the region of the nearest city of the same country within 80 km
+  const n = nearestCity(lat, lon);
+  return n && n.km < 80 && n.city.cc === cc && n.city.state ? n.city.state : '';
+}
 function buildHistory(rows) {
   HIST = rows.map(r => {
     const [id, kind, name, lat, lon, sl, cc0, year] = r;
@@ -384,7 +417,8 @@ function buildHistory(rows) {
     if (!cc || !COUNTRIES[cc]) { const n = nearestCity(lat, lon); cc = n ? n.city.cc : ''; }
     const co = COUNTRIES[cc] || ['', '', ''];
     const tier = sl >= 70 ? 2 : sl >= 55 ? 3 : sl >= 40 ? 4 : 5;
-    return {id, kind, name, lat, lon, sl, cc, country: cc0 ? co[0] : '', region: co[2] || co[1] || 'Other', tier, year};
+    const state = cc0 ? adminOf(cc, lat, lon) : '';
+    return {id, kind, name, lat, lon, sl, cc, country: cc0 ? co[0] : '', state, region: co[2] || co[1] || 'Other', tier, year};
   });
   HIST.forEach(p => BYID.set(p.id, p));
 }
@@ -586,7 +620,7 @@ function commitGuess() {
   $('#r-mult').textContent = mult > 1 ? '×' + mult + ' = ' + sc * mult : (s.mode === 'game' ? '×1' : '');
   const bits = [];
   if (p.kind === 'city') { bits.push([p.state, p.country].filter(Boolean).join(', ')); if (p.pop >= 1000) bits.push('pop. ' + (p.pop >= 1e6 ? (p.pop / 1e6).toFixed(1) + 'M' : Math.round(p.pop / 1e3) + 'k')); if (p.capital) bits.push('capital'); }
-  else { if (p.country) bits.push(p.country); if (p.year != null) bits.push(fmtYear(p.year)); }
+  else { bits.push([p.state, p.country].filter(Boolean).join(', ')); if (p.year != null) bits.push(fmtYear(p.year)); }
   bits.push(p.region);
   const srsTxt = {miss: 'added to review', up: 'review level up', mastered: 'mastered, out of review', hold: 'stays in review'}[st];
   $('#r-info').textContent = bits.filter(Boolean).join(' · ') + (srsTxt ? ' · ' + srsTxt : '');
@@ -705,7 +739,7 @@ function readMenu() {
   if (!settings.kinds.city && !(HIST.length && (settings.kinds.battle || settings.kinds.site))) settings.kinds.city = true;
   settings.tmin = +$('#f-tmin').value; settings.tmax = +$('#f-tmax').value; settings.region = $('#f-region').value; settings.weak = $('#f-weak').checked;
   settings.style = $('#s-style').value; settings.maxZoom = Math.max(1, Math.min(16, +$('#s-zoom').value || 10)); settings.confirm = $('#s-confirm').checked;
-  settings.miss = Math.max(50, Math.min(99, +$('#s-miss').value || 90)); settings.grad = Math.max(settings.miss, Math.min(100, +$('#s-grad').value || 95));
+  settings.miss = Math.max(50, Math.min(99, +$('#s-miss').value || 95)); settings.grad = Math.max(settings.miss, Math.min(100, +$('#s-grad').value || 97));
   store.set('settings', settings);
   if (prevStyle !== settings.style) map.setStyle(STYLES[settings.style]);
   if (prevZoom !== settings.maxZoom) map.setMaxZoom(settings.maxZoom);
@@ -760,6 +794,7 @@ function showBoot(msg) { const b = $('#boot'); b.style.display = 'grid'; b.inner
   if (typeof mapboxgl === 'undefined') { showBoot('Mapbox GL JS failed to load. Check your connection.'); return; }
   try { await loadCities(); } catch (e) { showBoot('Could not load places.json: ' + esc(e.message)); return; }
   buildGrid();
+  await loadAdmin1();
   initMap();
   wire();
   $('#boot').style.display = 'none';
