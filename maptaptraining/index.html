@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="theme-color" content="#0b1020">
+<title>Tap Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.33.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.33.0/mapbox-gl.js"></script>
+<style>
+:root{
+  --bg:#0b1020; --panel:rgba(12,17,34,.82); --panel-solid:#0f1529; --line:rgba(255,255,255,.10);
+  --text:#eef1f8; --muted:#97a0b8; --accent:#ffb547; --good:#5ee0a0; --mid:#ffd166; --bad:#ff6b6b;
+  --guess:#ffffff; --r:14px;
+  --mono:'JetBrains Mono',ui-monospace,monospace; --sans:'Space Grotesk',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow:hidden;-webkit-tap-highlight-color:transparent}
+#map{position:fixed;inset:0}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+.glass{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:var(--r)}
+
+/* top bar */
+#top{position:fixed;top:calc(10px + env(safe-area-inset-top));left:12px;right:12px;display:flex;gap:10px;align-items:stretch;pointer-events:none;z-index:5}
+#top > *{pointer-events:auto}
+#prompt{flex:1;min-width:0;padding:10px 14px;display:flex;flex-direction:column;justify-content:center}
+#prompt .meta{font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;display:flex;gap:10px;flex-wrap:wrap}
+#prompt .meta b{color:var(--accent);font-weight:600}
+#target{font-size:clamp(18px,4.6vw,26px);font-weight:600;line-height:1.15;margin-top:2px;overflow-wrap:anywhere}
+#target small{color:var(--muted);font-weight:500}
+#scorebox{padding:8px 14px;text-align:right;display:flex;flex-direction:column;justify-content:center;min-width:86px}
+#scorebox .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+#scorebox .val{font-family:var(--mono);font-size:24px;font-weight:700}
+.iconbtn{width:46px;display:grid;place-items:center;font-size:20px}
+.iconbtn:hover{background:rgba(255,255,255,.06)}
+
+/* bottom sheet */
+#sheet{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));width:min(560px,calc(100% - 24px));padding:14px 16px;z-index:5;display:none}
+#sheet.show{display:block}
+.row{display:flex;align-items:center;gap:12px}
+.grow{flex:1;min-width:0}
+.big{font-family:var(--mono);font-size:30px;font-weight:700;line-height:1}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.btn{background:var(--accent);color:#1b1300;font-weight:700;padding:12px 18px;border-radius:11px;white-space:nowrap}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.ghost{background:rgba(255,255,255,.08);color:var(--text);font-weight:600}
+.pill{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:99px;background:rgba(255,255,255,.08);color:var(--muted)}
+#guessbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:5;display:none}
+#guessbar.show{display:block}
+#guessbar .btn{padding:14px 34px;font-size:17px;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+
+/* overlays */
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(5,8,18,.6);display:none;align-items:flex-start;justify-content:center;padding:calc(18px + env(safe-area-inset-top)) 12px 18px;overflow:auto}
+.overlay.show{display:flex}
+.card{background:var(--panel-solid);border:1px solid var(--line);border-radius:18px;width:min(720px,100%);padding:18px 18px 22px;margin:auto 0}
+.card h2{margin:0 0 4px;font-size:22px}
+.card h3{margin:22px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.card .head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.card .head h2{flex:1}
+.x{font-size:22px;width:38px;height:38px;border-radius:10px}
+.x:hover{background:rgba(255,255,255,.07)}
+.seg{display:flex;background:rgba(255,255,255,.06);border-radius:11px;padding:3px;gap:3px;flex-wrap:wrap}
+.seg button{flex:1;padding:9px 10px;border-radius:9px;color:var(--muted);font-weight:600;font-size:14px;min-width:80px}
+.seg button.on{background:var(--accent);color:#1b1300}
+.field{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.field:last-child{border-bottom:0}
+.field label{flex:1}
+.field .hint{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+select,input[type=number]{background:#1a2140;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 8px;font:inherit;font-size:14px}
+input[type=number]{width:74px}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mode{border:1px solid var(--line);border-radius:12px;padding:12px;text-align:left;background:rgba(255,255,255,.03)}
+.mode b{display:block;font-size:16px}
+.mode span{color:var(--muted);font-size:12.5px;line-height:1.35;display:block;margin-top:4px}
+.mode.on{border-color:var(--accent);background:rgba(255,181,71,.10)}
+.note{color:var(--muted);font-size:13px;line-height:1.45}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kpi{background:rgba(255,255,255,.04);border-radius:12px;padding:10px}
+.kpi .v{font-family:var(--mono);font-size:22px;font-weight:700}
+.kpi .l{color:var(--muted);font-size:12px;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;padding:6px 6px;border-bottom:1px solid var(--line)}
+td{padding:6px;border-bottom:1px solid rgba(255,255,255,.05)}
+td.n,th.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+.bar{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#toast{position:fixed;left:50%;top:calc(128px + env(safe-area-inset-top));transform:translateX(-50%);z-index:30;padding:10px 14px;display:none;font-size:14px;max-width:calc(100% - 24px)}
+#toast.show{display:block}
+.sumrow td:first-child{color:var(--muted);font-family:var(--mono)}
+.scorechip{font-family:var(--mono);font-weight:700}
+svg text{font-family:var(--mono)}
+#boot{position:fixed;inset:0;display:grid;place-items:center;z-index:40;background:var(--bg);color:var(--muted);font-size:15px;text-align:center;padding:20px}
+.mapboxgl-ctrl-attrib{font-size:10px}
+.answer-dot{width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid #1b1300;box-shadow:0 0 0 4px rgba(255,181,71,.35)}
+.guess-dot{width:14px;height:14px;border-radius:50%;background:var(--guess);border:3px solid #111;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
+@media (max-width:600px){
+  .modes{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  #scorebox{min-width:70px;padding:8px 10px}
+  #scorebox .val{font-size:20px}
+  .iconbtn{width:42px}
+}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="boot">Loading…</div>
+
+<div id="top">
+  <div id="prompt" class="glass">
+    <div class="meta"><span id="m-mode">Game</span><span id="m-round"></span><b id="m-mult"></b></div>
+    <div id="target">…</div>
+  </div>
+  <div id="scorebox" class="glass"><div class="lbl" id="sb-lbl">Score</div><div class="val" id="sb-val">0</div></div>
+  <button class="glass iconbtn" id="b-stats" title="Stats (S)">📊</button>
+  <button class="glass iconbtn" id="b-menu" title="Menu (M)">☰</button>
+</div>
+
+<div id="guessbar"><button class="btn" id="b-guess">Guess</button></div>
+
+<div id="sheet" class="glass">
+  <div class="row">
+    <div class="grow">
+      <div class="big" id="r-dist">0 km</div>
+      <div class="sub" id="r-info"></div>
+    </div>
+    <div style="text-align:right">
+      <div class="big" id="r-score" style="color:var(--accent)">0</div>
+      <div class="sub" id="r-mult"></div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:12px">
+    <div class="grow sub" id="r-near"></div>
+    <button class="btn" id="b-next">Next</button>
+  </div>
+</div>
+
+<div id="toast" class="glass"></div>
+
+<!-- MENU -->
+<div class="overlay" id="ov-menu">
+  <div class="card">
+    <div class="head"><h2>Tap Trainer</h2><button class="x" data-close>✕</button></div>
+    <div class="note">Unlimited training. Enter or Space to guess and continue. Taps that move the globe never count as guesses.</div>
+
+    <h3>Mode</h3>
+    <div class="modes" id="modes">
+      <button class="mode" data-mode="game"><b>Game</b><span>5 rounds, harder each time, ×1 ×1 ×2 ×3 ×3, score out of 1000.</span></button>
+      <button class="mode" data-mode="endless"><b>Endless</b><span>Non-stop rounds with your filters below. Weak regions can be weighted up.</span></button>
+      <button class="mode" data-mode="review"><b>Review</b><span id="review-desc">Places you missed, brought back on a spaced schedule.</span></button>
+    </div>
+
+    <h3>Places</h3>
+    <div class="field"><label>Cities<span class="hint" id="h-cities"></span></label><input type="checkbox" id="k-city"></div>
+    <div class="field"><label>Battles &amp; sieges<span class="hint" id="h-battles"></span></label><input type="checkbox" id="k-battle"></div>
+    <div class="field"><label>World Heritage sites<span class="hint" id="h-sites"></span></label><input type="checkbox" id="k-site"></div>
+
+    <h3>Endless filters</h3>
+    <div class="field"><label>Difficulty<span class="hint">1 = capitals and megacities, 5 = small towns and obscure sites</span></label>
+      <select id="f-tmin"></select><span class="note">to</span><select id="f-tmax"></select></div>
+    <div class="field"><label>Region</label><select id="f-region"></select></div>
+    <div class="field"><label>Focus my weak regions<span class="hint">Regions where you score lower come up more often</span></label><input type="checkbox" id="f-weak"></div>
+
+    <h3>Map</h3>
+    <div class="field"><label>Style</label>
+      <select id="s-style"><option value="satellite">Satellite</option><option value="terrain">Terrain, no labels</option><option value="dark">Dark land and sea</option></select></div>
+    <div class="field"><label>Max zoom<span class="hint">Limit how close you can zoom (1 to 12)</span></label><input type="number" id="s-zoom" min="1" max="12" step="0.5"></div>
+    <div class="field"><label>Confirm before guessing<span class="hint">Tap places a pin, the Guess button commits it</span></label><input type="checkbox" id="s-confirm"></div>
+
+    <h3>Review rules</h3>
+    <div class="field"><label>Counts as a miss below<span class="hint">Score under this sends the place to review</span></label><input type="number" id="s-miss" min="50" max="99"></div>
+    <div class="field"><label>Mastered at<span class="hint">Score at or above this moves it up a level</span></label><input type="number" id="s-grad" min="60" max="100"></div>
+
+    <div class="actions" style="margin-top:18px"><button class="btn" id="b-apply">Start</button></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="overlay" id="ov-stats">
+  <div class="card">
+    <div class="head"><h2>Progress</h2><button class="x" data-close>✕</button></div>
+    <div id="stats-body"></div>
+    <h3>Data</h3>
+    <div class="note">Everything lives in this browser only. Export now and then so a cleared cache does not wipe your history.</div>
+    <div class="actions">
+      <button class="btn ghost" id="b-export">Export</button>
+      <label class="btn ghost" style="cursor:pointer">Import<input type="file" id="f-import" accept="application/json" hidden></label>
+      <button class="btn ghost" id="b-reset" style="color:var(--bad)">Reset all</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME SUMMARY -->
+<div class="overlay" id="ov-summary">
+  <div class="card">
+    <div class="head"><h2 id="sum-title">Game over</h2><button class="x" data-close>✕</button></div>
+    <div id="sum-body"></div>
+    <div class="actions" style="margin-top:16px"><button class="btn" id="b-again">New game</button><button class="btn ghost" id="b-sum-stats">Stats</button></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* =========================================================
+   CONFIG
+   ========================================================= */
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibGVib3VyYmlzdGFuIiwiYSI6ImNtcnV3aXBibzAydXAyenM1eHY3ZnQzZTkifQ._8SdrGD8C4i2zIuleVjppA';
+
+// Score table = lower envelope of 26 real MapTap rounds (the strictest round wins).
+// [km, score] pairs, interpolated linearly in log(1 + km). Add new real pairs here;
+// if a new pair scores lower than the table at that distance, it should replace the envelope there.
+const SCORE_TABLE = [[0, 100], [21, 100], [26, 99], [33, 99], [90, 98], [131, 97], [185, 96], [242, 95],
+  [391, 92], [445, 91], [623, 87], [855, 83], [1195, 80], [1598, 74], [3357, 49], [9714, 12], [15878, 3], [20015, 0]];
+const GAME_MULT = [1, 1, 2, 3, 3];
+const GAME_TIERS = [[1, 2], [2, 3], [3, 4], [3, 5], [4, 5]];
+const HIST_CHANCE = 0.3;            // chance a game round (3 to 5) is a battle or site
+const TARGETS = [{v: 915, l: 'you now'}, {v: 930, l: 'friend 1'}, {v: 955, l: 'friend 2'}];
+const SRS_DAYS = [0, 1, 3, 7, 16, 35]; // Leitner intervals; past the last box the place is mastered
+const RECENT_AVOID = 300;           // do not repeat a place within this many rounds
+const HIST_TTL_DAYS = 30;
+const LS = 'tt.v1.';
+const STYLES = {
+  satellite: 'mapbox://styles/mapbox/satellite-v9',
+  terrain: 'mapbox://styles/mapbox/outdoors-v12',
+  dark: 'mapbox://styles/mapbox/dark-v11'
+};
+const DEFAULTS = {mode: 'game', style: 'satellite', maxZoom: 6, confirm: true,
+  kinds: {city: true, battle: true, site: true}, tmin: 1, tmax: 5, region: 'all', weak: false, miss: 90, grad: 95};
+
+/* =========================================================
+   STORAGE (localStorage can throw or be empty, so wrap it)
+   ========================================================= */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(LS + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(LS + k, JSON.stringify(v)); return true; } catch (e) { toast('Could not save to this browser'); return false; } }
+};
+let settings = Object.assign({}, DEFAULTS, store.get('settings', {}));
+settings.kinds = Object.assign({}, DEFAULTS.kinds, settings.kinds || {});
+let log = store.get('log', []);       // {t,id,s,d,m,k,g}  g = region
+let games = store.get('games', []);   // {t,total,r:[{id,s,d,x}]}
+let srs = store.get('srs', {});       // id -> {b,due,n,last}
+let recent = store.get('recent', []);
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const R_EARTH = 6371.0088, rad = x => x * Math.PI / 180, deg = x => x * 180 / Math.PI;
+function haversine(lat1, lon1, lat2, lon2) {
+  const dLat = rad(lat2 - lat1), dLon = rad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R_EARTH * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+function scoreFor(km) {
+  const T = SCORE_TABLE, L = x => Math.log1p(Math.max(x, 0));
+  if (km >= T[T.length - 1][0]) return T[T.length - 1][1];
+  let i = 1; while (T[i][0] < km) i++;
+  const [d0, s0] = T[i - 1], [d1, s1] = T[i];
+  const t = (L(km) - L(d0)) / (L(d1) - L(d0));
+  return Math.max(0, Math.min(100, Math.round(s0 + t * (s1 - s0))));
+}
+function toVec(lat, lon) { const la = rad(lat), lo = rad(lon); return [Math.cos(la) * Math.cos(lo), Math.cos(la) * Math.sin(lo), Math.sin(la)]; }
+function toLL(v) { return [deg(Math.atan2(v[1], v[0])), deg(Math.atan2(v[2], Math.hypot(v[0], v[1])))]; }
+function greatCircle(a, b, n = 96) { // a,b = [lon,lat]; returns unwrapped [lon,lat] list
+  const A = toVec(a[1], a[0]), B = toVec(b[1], b[0]);
+  const dot = Math.max(-1, Math.min(1, A[0] * B[0] + A[1] * B[1] + A[2] * B[2])), w = Math.acos(dot);
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const f = i / n; let v;
+    if (w < 1e-9) v = A; else {
+      const s1 = Math.sin((1 - f) * w) / Math.sin(w), s2 = Math.sin(f * w) / Math.sin(w);
+      v = [s1 * A[0] + s2 * B[0], s1 * A[1] + s2 * B[1], s1 * A[2] + s2 * B[2]];
+    }
+    pts.push(toLL(v));
+  }
+  for (let i = 1; i < pts.length; i++) { // unwrap longitudes so the line never jumps across the antimeridian
+    while (pts[i][0] - pts[i - 1][0] > 180) pts[i][0] -= 360;
+    while (pts[i][0] - pts[i - 1][0] < -180) pts[i][0] += 360;
+  }
+  return pts;
+}
+const fmtKm = km => km < 10 ? km.toFixed(1) + ' km' : Math.round(km).toLocaleString('en-US') + ' km';
+const fmtYear = y => y == null ? '' : y < 0 ? (-y) + ' BC' : String(y);
+const scoreColor = s => s >= 95 ? 'var(--good)' : s >= 85 ? 'var(--mid)' : 'var(--bad)';
+const weightedPick = (items, w) => { let tot = 0; for (const x of w) tot += x; let r = Math.random() * tot; for (let i = 0; i < items.length; i++) { r -= w[i]; if (r <= 0) return items[i]; } return items[items.length - 1]; };
+let toastTimer;
+function toast(msg, ms = 2600) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), ms); }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+
+/* =========================================================
+   PLACES
+   ========================================================= */
+let COUNTRIES = {}, CITIES = [], HIST = [], BYID = new Map(), REGIONS = [];
+function placeLabel(p) {
+  if (p.kind === 'battle') return {main: p.name, small: p.year != null ? fmtYear(p.year) : ''};
+  if (p.kind === 'site') return {main: p.name, small: p.country || ''};
+  if (p.state === 'Crimea') return {main: p.name, small: 'Crimea'};
+  const parts = [p.state, p.country].filter(Boolean);
+  return {main: p.name, small: parts.join(', ')};
+}
+async function loadCities() {
+  const r = await fetch('places.json', {cache: 'force-cache'});
+  if (!r.ok) throw new Error('places.json ' + r.status);
+  const d = await r.json();
+  COUNTRIES = d.countries;
+  CITIES = d.cities.map(c => {
+    const co = COUNTRIES[c[2]] || ['', '', ''];
+    return {id: 'c' + c[0], kind: 'city', name: c[1], cc: c[2], lat: c[3], lon: c[4], pop: c[5], capital: !!c[6], state: c[7], tier: c[8],
+      country: co[0], region: co[2] || co[1] || 'Other'};
+  });
+  CITIES.forEach(p => BYID.set(p.id, p));
+  REGIONS = [...new Set(Object.values(COUNTRIES).map(v => v[2]).filter(Boolean))].sort();
+}
+// Nearest city, used to name where a guess landed and to give sea battles a region.
+const GRID = new Map();
+function buildGrid() { for (const c of CITIES) { const k = Math.floor(c.lat / 5) + ':' + Math.floor(((c.lon % 360) + 540) % 360 / 5); (GRID.get(k) || GRID.set(k, []).get(k)).push(c); } }
+function nearestCity(lat, lon) {
+  let best = null, bd = Infinity;
+  const gy = Math.floor(lat / 5), gx = Math.floor(((lon % 360) + 540) % 360 / 5);
+  const reach = 500 * Math.max(Math.cos(rad(lat)), 0.15); // km covered per ring, conservative
+  for (let ring = 0; ring <= 36; ring++) {
+    for (let dy = -ring; dy <= ring; dy++) for (let dx = -ring; dx <= ring; dx++) {
+      if (Math.max(Math.abs(dy), Math.abs(dx)) !== ring) continue;
+      const cell = GRID.get((gy + dy) + ':' + (((gx + dx) % 72) + 72) % 72);
+      if (!cell) continue;
+      for (const c of cell) { const d = haversine(lat, lon, c.lat, c.lon); if (d < bd) { bd = d; best = c; } }
+    }
+    if (best && ring >= 1 && bd < ring * reach) break;
+  }
+  return best ? {city: best, km: bd} : null;
+}
+// Battles, sieges and World Heritage sites from Wikidata, cached in this browser.
+const SPARQL_BATTLES = `SELECT ?item ?label (SAMPLE(?coord) AS ?c) ?sl (SAMPLE(?cc) AS ?ccode) (MIN(?y) AS ?year) WHERE {
+  VALUES ?cls { wd:Q178561 wd:Q188055 wd:Q1261499 }
+  ?item wdt:P31 ?cls; wdt:P625 ?coord; wikibase:sitelinks ?sl. FILTER(?sl >= 25)
+  ?item rdfs:label ?label FILTER(LANG(?label)="en")
+  OPTIONAL { ?item wdt:P17/wdt:P297 ?cc }
+  OPTIONAL { ?item wdt:P585|wdt:P580 ?d BIND(YEAR(?d) AS ?y) }
+} GROUP BY ?item ?label ?sl`;
+const SPARQL_SITES = `SELECT ?item ?label (SAMPLE(?coord) AS ?c) ?sl (SAMPLE(?cc) AS ?ccode) WHERE {
+  ?item wdt:P1435 wd:Q9259; wdt:P625 ?coord; wikibase:sitelinks ?sl. FILTER(?sl >= 30)
+  ?item rdfs:label ?label FILTER(LANG(?label)="en")
+  OPTIONAL { ?item wdt:P17/wdt:P297 ?cc }
+} GROUP BY ?item ?label ?sl HAVING(COUNT(DISTINCT ?coord) = 1)`;
+async function sparql(q) {
+  const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 15000);
+  const r = await fetch('https://query.wikidata.org/sparql?format=json&query=' + encodeURIComponent(q), {headers: {Accept: 'application/sparql-results+json'}, signal: ctl.signal}).finally(() => clearTimeout(timer));
+  if (!r.ok) throw new Error('Wikidata ' + r.status);
+  return (await r.json()).results.bindings;
+}
+function parsePoint(s) { const m = /Point\(([-\d.eE]+) ([-\d.eE]+)\)/.exec(s || ''); return m ? [+m[2], +m[1]] : null; }
+async function loadHistory(force = false) {
+  const cached = store.get('hist', null);
+  if (!force && cached && Date.now() - cached.t < HIST_TTL_DAYS * 864e5) return cached.rows;
+  try {
+    const [b, s] = await Promise.all([sparql(SPARQL_BATTLES), sparql(SPARQL_SITES)]);
+    const rows = [];
+    const seen = new Set();
+    const add = (x, kind) => {
+      const id = x.item.value.split('/').pop(); if (seen.has(id)) return;
+      const ll = parsePoint(x.c && x.c.value); if (!ll) return;
+      seen.add(id);
+      rows.push([id, kind, x.label.value, +ll[0].toFixed(3), +ll[1].toFixed(3), +x.sl.value, x.ccode ? x.ccode.value : '', x.year ? +x.year.value : null]);
+    };
+    b.forEach(x => add(x, 'battle')); s.forEach(x => add(x, 'site'));
+    store.set('hist', {t: Date.now(), rows});
+    return rows;
+  } catch (e) {
+    console.warn('history load failed', e);
+    return cached ? cached.rows : [];
+  }
+}
+function buildHistory(rows) {
+  HIST = rows.map(r => {
+    const [id, kind, name, lat, lon, sl, cc0, year] = r;
+    let cc = cc0;
+    if (!cc || !COUNTRIES[cc]) { const n = nearestCity(lat, lon); cc = n ? n.city.cc : ''; }
+    const co = COUNTRIES[cc] || ['', '', ''];
+    const tier = sl >= 70 ? 2 : sl >= 55 ? 3 : sl >= 40 ? 4 : 5;
+    return {id, kind, name, lat, lon, sl, cc, country: cc0 ? co[0] : '', region: co[2] || co[1] || 'Other', tier, year};
+  });
+  HIST.forEach(p => BYID.set(p.id, p));
+}
+
+/* =========================================================
+   PICKING
+   ========================================================= */
+function regionAverages() {
+  const m = {};
+  for (const e of log.slice(-3000)) { (m[e.g] = m[e.g] || [0, 0]); m[e.g][0] += e.s; m[e.g][1]++; }
+  const out = {}; for (const k in m) out[k] = m[k][0] / m[k][1]; return out;
+}
+function pool({tiers, kinds, region}) {
+  const all = [];
+  if (kinds.city) all.push(...CITIES);
+  if (kinds.battle || kinds.site) all.push(...HIST.filter(p => kinds[p.kind]));
+  return all.filter(p => p.tier >= tiers[0] && p.tier <= tiers[1] && (region === 'all' || p.region === region));
+}
+function pickFrom(candidates, weakBias) {
+  const avoid = new Set(recent);
+  let c = candidates.filter(p => !avoid.has(p.id));
+  if (!c.length) c = candidates;
+  if (!c.length) return null;
+  const perCountry = {}; for (const p of c) perCountry[p.cc] = (perCountry[p.cc] || 0) + 1;
+  const avg = weakBias ? regionAverages() : null;
+  const w = c.map(p => {
+    let x = 1 / Math.sqrt(perCountry[p.cc] || 1); // keeps big countries from flooding the draw
+    if (avg) { const a = avg[p.region]; x *= a == null ? 1.6 : Math.max(0.3, (100 - a) / 8); }
+    return x;
+  });
+  return weightedPick(c, w);
+}
+function pickGameRound(i) {
+  const k = settings.kinds;
+  const histOK = (k.battle || k.site) && HIST.length && (i >= 2 || !k.city);
+  const wantHist = histOK && (Math.random() < HIST_CHANCE || !k.city);
+  const kinds = wantHist ? {city: false, battle: k.battle, site: k.site} : {city: k.city || !histOK, battle: false, site: false};
+  let p = pickFrom(pool({tiers: GAME_TIERS[i], kinds, region: 'all'}));
+  if (!p) p = pickFrom(pool({tiers: [1, 5], kinds: {city: true, battle: false, site: false}, region: 'all'}));
+  return p;
+}
+function dueReviews() {
+  const now = Date.now();
+  return Object.entries(srs).filter(([id, r]) => r.due <= now && BYID.has(id)).sort((a, b) => a[1].due - b[1].due).map(([id]) => BYID.get(id));
+}
+function pickReview() {
+  const due = dueReviews().filter(p => !session.reviewSeen.has(p.id));
+  if (due.length) return due[0];
+  return null;
+}
+
+/* =========================================================
+   SRS + LOGGING
+   ========================================================= */
+function updateSrs(p, s) {
+  const r = srs[p.id];
+  if (s < settings.miss) { srs[p.id] = {b: 0, due: Date.now(), n: (r ? r.n : 0) + 1, last: s}; return 'miss'; }
+  if (!r) return 'ok';
+  if (s >= settings.grad) {
+    const b = r.b + 1;
+    if (b >= SRS_DAYS.length) { delete srs[p.id]; return 'mastered'; }
+    srs[p.id] = {b, due: Date.now() + SRS_DAYS[b] * 864e5, n: r.n, last: s}; return 'up';
+  }
+  srs[p.id] = {b: r.b, due: Date.now() + 864e5, n: r.n, last: s}; return 'hold';
+}
+function record(p, km, s, mode) {
+  log.push({t: Date.now(), id: p.id, s, d: Math.round(km), m: mode[0], k: p.kind[0], g: p.region});
+  if (log.length > 30000) log = log.slice(-30000);
+  recent.push(p.id); if (recent.length > RECENT_AVOID) recent = recent.slice(-RECENT_AVOID);
+  const st = updateSrs(p, s);
+  store.set('log', log); store.set('srs', srs); store.set('recent', recent);
+  return st;
+}
+
+/* =========================================================
+   MAP
+   ========================================================= */
+let map, pinMarker = null, guessMarker = null, answerMarker = null;
+function el(cls) { const d = document.createElement('div'); d.className = cls; return d; }
+function hideClutter() {
+  if (settings.style === 'satellite') return;
+  for (const l of map.getStyle().layers) {
+    if (l.type === 'symbol' || /admin|boundary|road|bridge|tunnel|building|poi|transit|aeroway|path|ferry/.test(l.id))
+      map.setLayoutProperty(l.id, 'visibility', 'none');
+  }
+}
+function addArcLayer() {
+  if (!map.getSource('arc')) map.addSource('arc', {type: 'geojson', data: {type: 'FeatureCollection', features: []}});
+  if (!map.getLayer('arc')) map.addLayer({id: 'arc', type: 'line', source: 'arc', layout: {'line-cap': 'round'},
+    paint: {'line-color': '#ffb547', 'line-width': 2.5, 'line-dasharray': [1.5, 1.5]}});
+}
+function onStyle() {
+  map.setFog({color: 'rgb(30,44,80)', 'high-color': 'rgb(20,40,110)', 'horizon-blend': 0.06, 'space-color': 'rgb(6,8,18)', 'star-intensity': 0.25});
+  hideClutter(); addArcLayer();
+  if (session && session.lastArc) map.getSource('arc').setData(session.lastArc);
+}
+function initMap() {
+  mapboxgl.accessToken = MAPBOX_TOKEN;
+  map = new mapboxgl.Map({container: 'map', style: STYLES[settings.style], projection: 'globe', center: [12, 28], zoom: 1.4,
+    maxZoom: settings.maxZoom, dragRotate: false, pitchWithRotate: false, touchPitch: false, attributionControl: false,
+    renderWorldCopies: false});
+  map.addControl(new mapboxgl.AttributionControl({compact: true}), 'bottom-right');
+  map.touchZoomRotate.disableRotation();
+  map.on('style.load', onStyle);
+  map.on('click', e => onTap(e.lngLat));
+  map.on('error', e => { if (e && e.error && /401|403|token/i.test(String(e.error.message || e.error.status))) showBoot('Mapbox refused the token. Check MAPBOX_TOKEN and its URL restrictions.'); });
+}
+function clearMarkers() {
+  for (const m of [pinMarker, guessMarker, answerMarker]) if (m) m.remove();
+  pinMarker = guessMarker = answerMarker = null;
+  session.lastArc = {type: 'FeatureCollection', features: []};
+  if (map.getSource('arc')) map.getSource('arc').setData(session.lastArc);
+}
+
+/* =========================================================
+   GAME FLOW
+   ========================================================= */
+let session = null; // {mode, round, total, rounds:[], place, state, pin, reviewSeen:Set, count}
+function newSession(mode) {
+  settings.mode = mode; store.set('settings', settings);
+  session = {mode, round: 0, total: 0, rounds: [], place: null, state: 'aim', pin: null, reviewSeen: new Set(), count: 0, sum: 0, lastArc: null};
+  nextRound(true);
+}
+function nextRound(first = false) {
+  closeOverlays();
+  clearMarkers();
+  let p = null;
+  if (session.mode === 'game') {
+    if (session.round >= 5) return endGame();
+    p = pickGameRound(session.round);
+  } else if (session.mode === 'endless') {
+    const tiers = [Math.min(settings.tmin, settings.tmax), Math.max(settings.tmin, settings.tmax)];
+    p = pickFrom(pool({tiers, kinds: settings.kinds, region: settings.region}), settings.weak);
+    if (!p) { toast('No places match these filters'); openMenu(); return; }
+  } else {
+    p = pickReview();
+    if (!p) { renderTop(); $('#target').innerHTML = 'Review queue empty <small>· nothing due right now</small>'; $('#sheet').classList.remove('show'); $('#guessbar').classList.remove('show'); session.state = 'idle';
+      if (!first) toast('Review done for now. Switch to Endless or Game.'); return; }
+    session.reviewSeen.add(p.id);
+  }
+  session.place = p; session.state = 'aim'; session.pin = null;
+  $('#sheet').classList.remove('show'); $('#guessbar').classList.remove('show');
+  if (!first && map.getZoom() > 2.2) map.easeTo({zoom: 2.2, duration: 600});
+  renderTop();
+}
+function renderTop() {
+  const s = session, p = s.place;
+  const modeName = {game: 'Game', endless: 'Endless', review: 'Review'}[s.mode];
+  $('#m-mode').textContent = modeName;
+  if (s.mode === 'game') {
+    $('#m-round').textContent = 'Round ' + Math.min(s.round + 1, 5) + '/5';
+    const m = GAME_MULT[Math.min(s.round, 4)]; $('#m-mult').textContent = m > 1 ? '×' + m : '';
+    $('#sb-lbl').textContent = 'Score'; $('#sb-val').textContent = s.total;
+  } else {
+    $('#m-round').textContent = s.mode === 'review' ? dueReviews().filter(x => !s.reviewSeen.has(x.id)).length + ' left' : '#' + (s.count + 1);
+    $('#m-mult').textContent = '';
+    $('#sb-lbl').textContent = 'Avg'; $('#sb-val').textContent = s.count ? (s.sum / s.count).toFixed(1) : '–';
+  }
+  if (p) {
+    const L = placeLabel(p);
+    const kindTag = p.kind === 'battle' ? '⚔ ' : p.kind === 'site' ? '🏛 ' : '';
+    $('#target').innerHTML = kindTag + esc(L.main) + (L.small ? ' <small>' + esc(L.small) + '</small>' : '');
+  }
+}
+function onTap(ll) {
+  if (!session || (session.state !== 'aim' && session.state !== 'pinned')) return;
+  const lng = ((ll.lng + 540) % 360) - 180;
+  session.pin = {lat: ll.lat, lon: lng};
+  if (!settings.confirm) return commitGuess();
+  if (pinMarker) pinMarker.setLngLat([lng, ll.lat]);
+  else pinMarker = new mapboxgl.Marker({element: el('guess-dot')}).setLngLat([lng, ll.lat]).addTo(map);
+  session.state = 'pinned';
+  $('#guessbar').classList.add('show');
+}
+function commitGuess() {
+  const s = session, p = s.place, g = s.pin;
+  if (!p || !g || (s.state !== 'aim' && s.state !== 'pinned')) return;
+  s.state = 'reveal';
+  $('#guessbar').classList.remove('show');
+  if (pinMarker) { pinMarker.remove(); pinMarker = null; }
+  const km = haversine(g.lat, g.lon, p.lat, p.lon), sc = scoreFor(km);
+  const mult = s.mode === 'game' ? GAME_MULT[s.round] : 1;
+  const st = record(p, km, sc, s.mode);
+  if (s.mode === 'game') { s.total += sc * mult; s.rounds.push({id: p.id, s: sc, d: Math.round(km), x: mult}); s.round++; }
+  else { s.count++; s.sum += sc; }
+
+  guessMarker = new mapboxgl.Marker({element: el('guess-dot')}).setLngLat([g.lon, g.lat]).addTo(map);
+  answerMarker = new mapboxgl.Marker({element: el('answer-dot')}).setLngLat([p.lon, p.lat]).addTo(map);
+  const line = greatCircle([g.lon, g.lat], [p.lon, p.lat]);
+  s.lastArc = {type: 'FeatureCollection', features: [{type: 'Feature', geometry: {type: 'LineString', coordinates: line}}]};
+  if (map.getSource('arc')) map.getSource('arc').setData(s.lastArc);
+  const mid = line[Math.floor(line.length / 2)];
+  const z = Math.max(0.8, Math.min(settings.maxZoom, Math.log2(20000 / (km * 2.2 + 150)) + 0.9));
+  map.flyTo({center: [((mid[0] + 540) % 360) - 180, mid[1]], zoom: z, duration: 900});
+
+  // result sheet
+  $('#r-dist').textContent = fmtKm(km);
+  $('#r-score').textContent = sc; $('#r-score').style.color = scoreColor(sc);
+  $('#r-mult').textContent = mult > 1 ? '×' + mult + ' = ' + sc * mult : (s.mode === 'game' ? '×1' : '');
+  const bits = [];
+  if (p.kind === 'city') { bits.push([p.state, p.country].filter(Boolean).join(', ')); if (p.pop >= 1000) bits.push('pop. ' + (p.pop >= 1e6 ? (p.pop / 1e6).toFixed(1) + 'M' : Math.round(p.pop / 1e3) + 'k')); if (p.capital) bits.push('capital'); }
+  else { if (p.country) bits.push(p.country); if (p.year != null) bits.push(fmtYear(p.year)); }
+  bits.push(p.region);
+  const srsTxt = {miss: 'added to review', up: 'review level up', mastered: 'mastered, out of review', hold: 'stays in review'}[st];
+  $('#r-info').textContent = bits.filter(Boolean).join(' · ') + (srsTxt ? ' · ' + srsTxt : '');
+  const n = nearestCity(g.lat, g.lon);
+  $('#r-near').textContent = n ? 'You tapped ' + (n.km < 15 ? 'in ' : Math.round(n.km) + ' km from ') + n.city.name + ', ' + (n.city.country || '') : '';
+  $('#b-next').textContent = s.mode === 'game' && s.round >= 5 ? 'Results' : 'Next';
+  $('#sheet').classList.add('show');
+  renderTop();
+  if (s.mode === 'game') $('#sb-val').textContent = s.total;
+}
+function endGame() {
+  const s = session;
+  games.push({t: Date.now(), total: s.total, r: s.rounds});
+  store.set('games', games);
+  const last10 = games.slice(-10).map(g => g.total), avg10 = last10.reduce((a, b) => a + b, 0) / last10.length;
+  const best = Math.max(...games.map(g => g.total));
+  let html = '<div class="row" style="margin:6px 0 14px"><div class="grow"><div class="big" style="font-size:44px">' + s.total + '<span style="font-size:20px;color:var(--muted)">/1000</span></div>' +
+    '<div class="sub">Last 10 avg ' + avg10.toFixed(0) + ' · best ' + best + ' · ' + games.length + ' games</div></div></div>';
+  html += '<table><tr><th>#</th><th>Place</th><th class="n">Dist</th><th class="n">Pts</th><th class="n">×</th><th class="n">Total</th></tr>';
+  s.rounds.forEach((r, i) => { const p = BYID.get(r.id), L = placeLabel(p);
+    html += '<tr class="sumrow"><td>' + (i + 1) + '</td><td>' + esc(L.main) + (L.small ? ' <span class="note">' + esc(L.small) + '</span>' : '') + '</td><td class="n">' + fmtKm(r.d) +
+      '</td><td class="n" style="color:' + scoreColor(r.s) + '">' + r.s + '</td><td class="n">' + r.x + '</td><td class="n">' + r.s * r.x + '</td></tr>'; });
+  html += '</table>';
+  const lost = s.rounds.map(r => (100 - r.s) * r.x), worst = lost.indexOf(Math.max(...lost));
+  if (lost[worst] > 0) html += '<p class="note" style="margin-top:12px">Biggest leak: round ' + (worst + 1) + ', ' + lost[worst] + ' points lost. Rounds 4 and 5 weigh triple, so precision there is where the gap to 955 lives.</p>';
+  html += targetLine(s.total);
+  $('#sum-title').textContent = 'Game over';
+  $('#sum-body').innerHTML = html;
+  session.state = 'idle';
+  openOverlay('#ov-summary');
+}
+function targetLine(total) {
+  return '<div class="actions">' + TARGETS.map(t => '<span class="pill" style="color:' + (total >= t.v ? 'var(--good)' : 'var(--muted)') + '">' + (total >= t.v ? '✓ ' : '') + t.v + ' ' + t.l + '</span>').join('') + '</div>';
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+function median(a) { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+function sparkline(vals) {
+  if (vals.length < 2) return '<p class="note">Play two games or more to see the trend.</p>';
+  const W = 660, H = 170, P = 30;
+  const lo = Math.min(800, ...vals) - 10, hi = 1000;
+  const x = i => P + i * (W - P - 8) / (vals.length - 1), y = v => H - 18 - (v - lo) / (hi - lo) * (H - 30);
+  let roll = []; for (let i = 0; i < vals.length; i++) { const w = vals.slice(Math.max(0, i - 9), i + 1); roll.push(w.reduce((a, b) => a + b, 0) / w.length); }
+  let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="display:block">';
+  TARGETS.forEach(t => { if (t.v > lo) svg += '<line x1="' + P + '" x2="' + (W - 8) + '" y1="' + y(t.v) + '" y2="' + y(t.v) + '" stroke="rgba(255,255,255,.18)" stroke-dasharray="3 4"/><text x="' + (W - 8) + '" y="' + (y(t.v) - 4) + '" fill="#97a0b8" font-size="10" text-anchor="end">' + t.v + ' ' + t.l + '</text>'; });
+  svg += '<polyline fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.2" points="' + vals.map((v, i) => x(i) + ',' + y(v)).join(' ') + '"/>';
+  svg += '<polyline fill="none" stroke="#ffb547" stroke-width="2.5" points="' + roll.map((v, i) => x(i) + ',' + y(v)).join(' ') + '"/>';
+  svg += '<text x="' + P + '" y="12" fill="#97a0b8" font-size="10">games (grey) · 10-game average (amber)</text></svg>';
+  return svg;
+}
+function renderStats() {
+  const b = $('#stats-body');
+  if (!log.length) { b.innerHTML = '<p class="note">No rounds yet. Play a few and come back.</p>'; return; }
+  const totals = games.map(g => g.total), avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN;
+  const r500 = log.slice(-500), avgRound = avg(r500.map(e => e.s));
+  const due = dueReviews().length, learning = Object.keys(srs).length;
+  let h = '<div class="kpis">' +
+    kpi(totals.length ? avg(totals.slice(-10)).toFixed(0) : '–', 'avg last 10 games') +
+    kpi(totals.length ? Math.max(...totals) : '–', 'best game') +
+    kpi(avgRound.toFixed(1), 'avg round, last 500') +
+    kpi(due + ' / ' + learning, 'due / in review') + '</div>';
+  h += '<h3>Game totals</h3>' + sparkline(totals.slice(-120));
+
+  // by region
+  const by = {}; for (const e of log.slice(-5000)) { (by[e.g] = by[e.g] || []).push(e); }
+  const rows = Object.entries(by).map(([g, a]) => ({g, n: a.length, s: avg(a.map(e => e.s)), d: median(a.map(e => e.d))})).filter(r => r.n >= 1).sort((a, b) => a.s - b.s);
+  h += '<h3>By region, weakest first</h3><table><tr><th>Region</th><th class="n">Rounds</th><th class="n">Avg</th><th class="n">Median km</th><th></th></tr>';
+  for (const r of rows) h += '<tr><td>' + esc(r.g) + '</td><td class="n">' + r.n + '</td><td class="n" style="color:' + scoreColor(r.s) + '">' + r.s.toFixed(1) + '</td><td class="n">' + Math.round(r.d).toLocaleString('en-US') +
+    '</td><td><div class="bar"><i style="width:' + Math.max(2, r.s) + '%;background:' + scoreColor(r.s) + '"></i></div></td></tr>';
+  h += '</table>';
+
+  // by kind and tier
+  const kinds = {c: 'Cities', b: 'Battles', s: 'Heritage sites'};
+  h += '<h3>By type</h3><table><tr><th>Type</th><th class="n">Rounds</th><th class="n">Avg</th><th class="n">Median km</th></tr>';
+  for (const k of ['c', 'b', 's']) { const a = log.filter(e => e.k === k); if (a.length) h += '<tr><td>' + kinds[k] + '</td><td class="n">' + a.length + '</td><td class="n" style="color:' + scoreColor(avg(a.map(e => e.s))) + '">' + avg(a.map(e => e.s)).toFixed(1) + '</td><td class="n">' + Math.round(median(a.map(e => e.d))).toLocaleString('en-US') + '</td></tr>'; }
+  h += '</table>';
+  const tiers = {}; for (const e of log) { const p = BYID.get(e.id); if (p) (tiers[p.tier] = tiers[p.tier] || []).push(e.s); }
+  h += '<h3>By difficulty</h3><table><tr><th>Tier</th><th class="n">Rounds</th><th class="n">Avg</th></tr>';
+  for (const t of [1, 2, 3, 4, 5]) if (tiers[t]) h += '<tr><td>' + t + '</td><td class="n">' + tiers[t].length + '</td><td class="n" style="color:' + scoreColor(avg(tiers[t])) + '">' + avg(tiers[t]).toFixed(1) + '</td></tr>';
+  h += '</table>';
+
+  // worst recent
+  const worst = log.slice(-400).filter(e => BYID.has(e.id)).sort((a, b) => a.s - b.s).slice(0, 12);
+  h += '<h3>Worst recent misses</h3><table><tr><th>Place</th><th class="n">km</th><th class="n">Pts</th></tr>';
+  for (const e of worst) { const p = BYID.get(e.id), L = placeLabel(p); h += '<tr><td>' + esc(L.main) + ' <span class="note">' + esc(L.small || p.region) + '</span></td><td class="n">' + e.d.toLocaleString('en-US') + '</td><td class="n" style="color:' + scoreColor(e.s) + '">' + e.s + '</td></tr>'; }
+  h += '</table>';
+  b.innerHTML = h;
+}
+const kpi = (v, l) => '<div class="kpi"><div class="v">' + v + '</div><div class="l">' + l + '</div></div>';
+
+/* =========================================================
+   UI WIRING
+   ========================================================= */
+function openOverlay(id) { $(id).classList.add('show'); }
+function closeOverlays() { document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show')); }
+function anyOverlay() { return !!document.querySelector('.overlay.show'); }
+function syncMenu() {
+  document.querySelectorAll('.mode').forEach(b => b.classList.toggle('on', b.dataset.mode === settings.mode));
+  $('#k-city').checked = settings.kinds.city; $('#k-battle').checked = settings.kinds.battle; $('#k-site').checked = settings.kinds.site;
+  $('#k-battle').disabled = $('#k-site').disabled = !HIST.length;
+  $('#h-cities').textContent = CITIES.length.toLocaleString('en-US') + ' places';
+  const nb = HIST.filter(p => p.kind === 'battle').length, ns = HIST.filter(p => p.kind === 'site').length;
+  $('#h-battles').textContent = HIST.length ? nb + ' places, from Wikidata' : 'Wikidata unreachable, cities only for now';
+  $('#h-sites').textContent = HIST.length ? ns + ' places, from Wikidata' : '';
+  $('#f-tmin').value = settings.tmin; $('#f-tmax').value = settings.tmax; $('#f-region').value = settings.region; $('#f-weak').checked = settings.weak;
+  $('#s-style').value = settings.style; $('#s-zoom').value = settings.maxZoom; $('#s-confirm').checked = settings.confirm;
+  $('#s-miss').value = settings.miss; $('#s-grad').value = settings.grad;
+  const d = dueReviews().length; $('#review-desc').textContent = d + ' due now, ' + Object.keys(srs).length + ' in review. Places you missed, on a spaced schedule.';
+}
+function openMenu() { syncMenu(); openOverlay('#ov-menu'); }
+function readMenu() {
+  const prevStyle = settings.style, prevZoom = settings.maxZoom;
+  settings.kinds = {city: $('#k-city').checked, battle: $('#k-battle').checked, site: $('#k-site').checked};
+  if (!settings.kinds.city && !(HIST.length && (settings.kinds.battle || settings.kinds.site))) settings.kinds.city = true;
+  settings.tmin = +$('#f-tmin').value; settings.tmax = +$('#f-tmax').value; settings.region = $('#f-region').value; settings.weak = $('#f-weak').checked;
+  settings.style = $('#s-style').value; settings.maxZoom = Math.max(1, Math.min(12, +$('#s-zoom').value || 6)); settings.confirm = $('#s-confirm').checked;
+  settings.miss = Math.max(50, Math.min(99, +$('#s-miss').value || 90)); settings.grad = Math.max(settings.miss, Math.min(100, +$('#s-grad').value || 95));
+  store.set('settings', settings);
+  if (prevStyle !== settings.style) map.setStyle(STYLES[settings.style]);
+  if (prevZoom !== settings.maxZoom) map.setMaxZoom(settings.maxZoom);
+}
+function wire() {
+  for (let t = 1; t <= 5; t++) { $('#f-tmin').add(new Option(t, t)); $('#f-tmax').add(new Option(t, t)); }
+  $('#f-region').add(new Option('All regions', 'all')); REGIONS.forEach(r => $('#f-region').add(new Option(r, r)));
+  document.querySelectorAll('.mode').forEach(b => b.onclick = () => { settings.mode = b.dataset.mode; syncMenu(); });
+  document.querySelectorAll('[data-close]').forEach(b => b.onclick = closeOverlays);
+  document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) closeOverlays(); }));
+  $('#b-menu').onclick = openMenu;
+  $('#b-stats').onclick = () => { renderStats(); openOverlay('#ov-stats'); };
+  $('#b-sum-stats').onclick = () => { closeOverlays(); renderStats(); openOverlay('#ov-stats'); };
+  $('#b-apply').onclick = () => { readMenu(); newSession(settings.mode); };
+  $('#b-again').onclick = () => newSession('game');
+  $('#b-guess').onclick = commitGuess;
+  $('#b-next').onclick = () => nextRound();
+  $('#b-export').onclick = () => {
+    const blob = new Blob([JSON.stringify({v: 1, exported: new Date().toISOString(), settings, log, games, srs}, null, 0)], {type: 'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'tap-trainer-' + new Date().toISOString().slice(0, 10) + '.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+  $('#f-import').onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try { const d = JSON.parse(await f.text()); if (!Array.isArray(d.log)) throw 0;
+      log = d.log; games = d.games || []; srs = d.srs || {}; store.set('log', log); store.set('games', games); store.set('srs', srs);
+      renderStats(); toast('Imported ' + log.length + ' rounds'); } catch (err) { toast('That file does not look like a Tap Trainer export'); }
+    e.target.value = '';
+  };
+  $('#b-reset').onclick = () => {
+    if (!confirm('Erase all rounds, games and review data in this browser? Export first if unsure.')) return;
+    log = []; games = []; srs = {}; recent = []; ['log', 'games', 'srs', 'recent'].forEach(k => store.set(k, k === 'srs' ? {} : [])); renderStats(); toast('All data erased');
+  };
+  document.addEventListener('keydown', e => {
+    if (!session || e.target.matches('input,select')) return;
+    if (e.key === 'Escape') return closeOverlays();
+    if (anyOverlay()) { if (e.key === 'Enter' && $('#ov-summary').classList.contains('show')) newSession('game'); return; }
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (session.state === 'pinned') commitGuess(); else if (session.state === 'reveal') nextRound();
+    }
+    if (e.key === 'm') openMenu();
+    if (e.key === 's') { renderStats(); openOverlay('#ov-stats'); }
+  });
+}
+function showBoot(msg) { const b = $('#boot'); b.style.display = 'grid'; b.innerHTML = '<div style="max-width:440px;line-height:1.5">' + msg + '</div>'; }
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+(async function boot() {
+  if (!MAPBOX_TOKEN || MAPBOX_TOKEN.startsWith('PASTE')) { showBoot('Paste your Mapbox public token into MAPBOX_TOKEN at the top of the script.'); return; }
+  if (typeof mapboxgl === 'undefined') { showBoot('Mapbox GL JS failed to load. Check your connection.'); return; }
+  try { await loadCities(); } catch (e) { showBoot('Could not load places.json: ' + esc(e.message)); return; }
+  buildGrid();
+  initMap();
+  wire();
+  $('#boot').style.display = 'none';
+  const histRows = await loadHistory();
+  buildHistory(histRows);
+  newSession(settings.mode === 'review' && !dueReviews().length ? 'game' : settings.mode);
+  if (!HIST.length) toast('Battles and sites unavailable (Wikidata unreachable). Cities only.', 4000);
+})();
+</script>
+</body>
+</html>
