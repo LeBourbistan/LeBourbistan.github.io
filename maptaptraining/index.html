@@ -170,7 +170,7 @@ svg text{font-family:var(--mono)}
     <h3>Map</h3>
     <div class="field"><label>Style</label>
       <select id="s-style"><option value="satellite">Satellite</option><option value="terrain">Terrain, no labels</option><option value="dark">Dark land and sea</option></select></div>
-    <div class="field"><label>Max zoom<span class="hint">Limit how close you can zoom (1 to 12)</span></label><input type="number" id="s-zoom" min="1" max="12" step="0.5"></div>
+    <div class="field"><label>Max zoom<span class="hint">Limit how close you can zoom (1 to 16)</span></label><input type="number" id="s-zoom" min="1" max="16" step="0.5"></div>
     <div class="field"><label>Confirm before guessing<span class="hint">Tap places a pin, the Guess button commits it</span></label><input type="checkbox" id="s-confirm"></div>
 
     <h3>Review rules</h3>
@@ -230,7 +230,7 @@ const STYLES = {
   terrain: 'mapbox://styles/mapbox/outdoors-v12',
   dark: 'mapbox://styles/mapbox/dark-v11'
 };
-const DEFAULTS = {mode: 'game', style: 'satellite', maxZoom: 6, confirm: true,
+const DEFAULTS = {v: 2, mode: 'game', style: 'satellite', maxZoom: 10, confirm: true,
   kinds: {city: true, battle: true, site: true}, tmin: 1, tmax: 5, region: 'all', weak: false, miss: 90, grad: 95};
 
 /* =========================================================
@@ -242,6 +242,7 @@ const store = {
 };
 let settings = Object.assign({}, DEFAULTS, store.get('settings', {}));
 settings.kinds = Object.assign({}, DEFAULTS.kinds, settings.kinds || {});
+if (!(settings.v >= 2)) { settings.maxZoom = Math.max(settings.maxZoom || 0, DEFAULTS.maxZoom); settings.v = 2; } // v1 shipped a too-tight zoom cap
 let log = store.get('log', []);       // {t,id,s,d,m,k,g}  g = region
 let games = store.get('games', []);   // {t,total,r:[{id,s,d,x}]}
 let srs = store.get('srs', {});       // id -> {b,due,n,last}
@@ -298,7 +299,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', 
    ========================================================= */
 let COUNTRIES = {}, CITIES = [], HIST = [], BYID = new Map(), REGIONS = [];
 function placeLabel(p) {
-  if (p.kind === 'battle') return {main: p.name, small: p.year != null ? fmtYear(p.year) : ''};
+  if (p.kind === 'battle') return {main: p.name, small: [p.country, p.year != null ? fmtYear(p.year) : ''].filter(Boolean).join(', ')};
   if (p.kind === 'site') return {main: p.name, small: p.country || ''};
   if (p.state === 'Crimea') return {main: p.name, small: 'Crimea'};
   const parts = [p.state, p.country].filter(Boolean);
@@ -703,7 +704,7 @@ function readMenu() {
   settings.kinds = {city: $('#k-city').checked, battle: $('#k-battle').checked, site: $('#k-site').checked};
   if (!settings.kinds.city && !(HIST.length && (settings.kinds.battle || settings.kinds.site))) settings.kinds.city = true;
   settings.tmin = +$('#f-tmin').value; settings.tmax = +$('#f-tmax').value; settings.region = $('#f-region').value; settings.weak = $('#f-weak').checked;
-  settings.style = $('#s-style').value; settings.maxZoom = Math.max(1, Math.min(12, +$('#s-zoom').value || 6)); settings.confirm = $('#s-confirm').checked;
+  settings.style = $('#s-style').value; settings.maxZoom = Math.max(1, Math.min(16, +$('#s-zoom').value || 10)); settings.confirm = $('#s-confirm').checked;
   settings.miss = Math.max(50, Math.min(99, +$('#s-miss').value || 90)); settings.grad = Math.max(settings.miss, Math.min(100, +$('#s-grad').value || 95));
   store.set('settings', settings);
   if (prevStyle !== settings.style) map.setStyle(STYLES[settings.style]);
